@@ -1,19 +1,19 @@
-package rubicsmain;
-
-import lejos.hardware.Battery;
-import lejos.hardware.Sound;
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.SensorMode;
-import lejos.hardware.sensor.SensorModes;
-import lejos.robotics.Color;
-import lejos.robotics.RegulatedMotor;
-import lejos.utility.Delay;
-
-public class Robot {
+//package rubicsmain;
+//
+//import lejos.hardware.Battery;
+//import lejos.hardware.Sound;
+//import lejos.hardware.lcd.LCD;
+//import lejos.hardware.motor.EV3LargeRegulatedMotor;
+//import lejos.hardware.port.MotorPort;
+//import lejos.hardware.port.SensorPort;
+//import lejos.hardware.sensor.EV3ColorSensor;
+//import lejos.hardware.sensor.SensorMode;
+//import lejos.hardware.sensor.SensorModes;
+//import lejos.robotics.Color;
+//import lejos.robotics.RegulatedMotor;
+//import lejos.utility.Delay;
+//
+//public class Robot {
 //	public void testColorSensor() {
 //		EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
 //		int colorId = colorSensor.getColorID();
@@ -57,12 +57,12 @@ public class Robot {
 //		}
 //		return result;
 //	}
-	
-	public void testLargeEngine() {
-		RegulatedMotor m = new EV3LargeRegulatedMotor(MotorPort.A);
-		m.rotate(360);
-		m.forward();
-	    LCD.drawString(Float.toString(Battery.getBatteryCurrent()), 0, 4);
-	    Delay.msDelay(10000);
-	}
-}
+//	
+//	public void testLargeEngine() {
+//		RegulatedMotor m = new EV3LargeRegulatedMotor(MotorPort.A);
+//		m.rotate(360);
+//		m.forward();
+//	    LCD.drawString(Float.toString(Battery.getBatteryCurrent()), 0, 4);
+//	    Delay.msDelay(10000);
+//	}
+//}
