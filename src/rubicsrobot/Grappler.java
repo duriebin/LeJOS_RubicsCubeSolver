@@ -5,7 +5,7 @@ import lejos.hardware.port.Port;
 import lejos.robotics.RegulatedMotor;
 
 public class Grappler {
-	RegulatedMotor grapplerMotor;
+	private RegulatedMotor grapplerMotor;
 	
 	/*
 	 * Initialisiert den Greifarm

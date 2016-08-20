@@ -5,7 +5,7 @@ import lejos.hardware.port.Port;
 import lejos.robotics.RegulatedMotor;
 
 public class RotationPlatform {
-	RegulatedMotor platformMotor;
+	private RegulatedMotor platformMotor;
 	
 	/*
 	 * Initialisiert die Rotations-Platform

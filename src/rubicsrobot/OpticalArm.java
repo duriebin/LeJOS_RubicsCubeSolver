@@ -5,7 +5,7 @@ import lejos.hardware.port.Port;
 import lejos.robotics.RegulatedMotor;
 
 public class OpticalArm {
-	RegulatedMotor opticalMotor;
+	private RegulatedMotor opticalMotor;
 	
 	/*
 	 * Initialisiert den optischen Arm

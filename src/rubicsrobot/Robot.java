@@ -19,6 +19,13 @@ public class Robot {
 	}
 	
 	/*
+	 * Dreht den Cube von einer Seite auf die andere
+	 */
+	public void flipCube() {
+		this.grappler.flipCube();
+	}
+	
+	/*
 	 * Dreht die Platform um 90° im Uhrzeigersinn
 	 */
 	public void rotatePlatformClockwise() {
