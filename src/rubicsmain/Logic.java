@@ -1,6 +1,8 @@
 package rubicsmain;
 
 import rubicscube.Cube;
+import rubicscube.CubeDirection;
+import rubicscube.CubeRotation;
 import rubicsrobot.Robot;
 
 public class Logic {
@@ -13,6 +15,7 @@ public class Logic {
 	
 	public Cube scanCube() {
 		Cube cube = new Cube();
+		SynchronousHandler syncHandler = new SynchronousHandler(cube, this.robot);
 		
 		// Ersten 4 Seiten einscannen
 		for (int i = 0; i < 4; i++) {
@@ -20,16 +23,16 @@ public class Logic {
 			
 			// beim letzten Mal muss der Cube nicht mehr gedreht werden, weil bereits alle 4 Seiten eingescannt sind
 			if (i != 4) {
-				this.robot.flipCube();
+				syncHandler.doSynchronousRotation(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE);
 			}
 		}
 		
 		// die 2 verbliebenen Seiten einscannen
-		this.robot.rotatePlatformClockwise();
-		this.robot.flipCube();
+		syncHandler.doSynchronousRotation(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE);
+		syncHandler.doSynchronousRotation(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE);
 		ScanCubeSide(cube);
 		for (int i = 0; i < 2; i++) {
-			this.robot.flipCube();
+			syncHandler.doSynchronousRotation(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE);
 		}
 		ScanCubeSide(cube);
 		

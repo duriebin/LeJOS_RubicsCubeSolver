@@ -20,6 +20,10 @@ public class OpticalArm {
 	}
 	
 	public void moveToCornerBlock() {
+		this.opticalMotor.rotateTo(-115 * 3); // TODO: testen; zu 115° drehen (1:3 Übersetzung)
+	}
+	
+	public void moveToEdgeBlock() {
 		this.opticalMotor.rotateTo(-120 * 3); // TODO: testen; zu 120° drehen (1:3 Übersetzung)
 	}
 	

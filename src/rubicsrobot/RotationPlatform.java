@@ -48,6 +48,13 @@ public class RotationPlatform {
 	}
 	
 	/*
+	 * Rotiert 45° im Uhrzeigersinn
+	 */
+	public void rotateToCornerPosition() {
+		this.platformMotor.rotate(45 * 3);
+	}
+	
+	/*
 	 * Motor wird zu seiner Ausgangsposition (0°) zurückgedreht
 	 */
 	public void defaultPosition() {

@@ -122,6 +122,9 @@ public class Cube {
 		}
 	}
 	
+	/*
+	 * Für die Ausgabe in der Console (Debugzwecke)
+	 */
 	public void displayInConsole() {
 		System.out.println("--------------------Start Display Cube--------------------");
 		for (ArrayList<ArrayList<Fragment>> layer : cubeFragments) {

@@ -10,6 +10,13 @@ public class Robot {
 	private Grappler grappler;
 	
 	/*
+	 * Zugriff auf den optischen Arm
+	 */
+	public OpticalArm getOpticalArm() {
+		return this.opticalArm;
+	}
+	
+	/*
 	 * Konstruktor zum Initialisieren der Motoren und Sensor
 	 */
 	public Robot() {
@@ -53,6 +60,13 @@ public class Robot {
 	public void rotateCubeCounterclockwise() {
 		this.grappler.holdCube();
 		this.rotationPlatform.rotateCounterclockwiseForCubeRotation();
+	}
+	
+	/*
+	 * Dreht den Cube um 45°
+	 */
+	public void rotateCubeToCornerPosition() {
+		this.rotationPlatform.rotateToCornerPosition();
 	}
 	
 
