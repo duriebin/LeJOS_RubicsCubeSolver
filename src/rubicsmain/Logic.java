@@ -1,8 +1,18 @@
 package rubicsmain;
 
+import rubicscube.Corner;
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
+import rubicscube.CubeLayer;
+import rubicscube.CubePosition;
 import rubicscube.CubeRotation;
+import rubicscube.Edge;
+import rubicscube.FacePosition;
+import rubicscube.Fragment;
+import rubicscube.LayerNotAllowedException;
+import rubicscube.Middle;
+import rubicscube.PositionNotAllowedException;
+import rubicsrobot.OpticalArm;
 import rubicsrobot.Robot;
 
 public class Logic {
@@ -13,7 +23,7 @@ public class Logic {
 		this.robot = robot;
 	}
 	
-	public Cube scanCube() {
+	public Cube scanCube() throws PositionNotAllowedException, LayerNotAllowedException {
 		Cube cube = new Cube();
 		SynchronousHandler syncHandler = new SynchronousHandler(cube, this.robot);
 		
@@ -42,7 +52,42 @@ public class Logic {
 	/*
 	 * Scannt eine Seite des Cubes
 	 */
-	private void ScanCubeSide(Cube cube) {
+	private void ScanCubeSide(Cube cube) throws PositionNotAllowedException, LayerNotAllowedException {
+		OpticalArm opticalArm = this.robot.getOpticalArm();
+		opticalArm.moveToMiddleBlock();
+		int color = opticalArm.scanBlock();
+		cube.setFragmentByPosition(4, new Middle(CubeLayer.TOP, CubePosition.MIDDLE, color));
 		
+		// rundherum die Farben auslesen
+		for(int i = 0; i < 4; i++) {
+			opticalArm.moveToEdgeBlock();
+			color = opticalArm.scanBlock();
+			
+			// Es kann sein, dass an der Kante bereits ein Fragment mit einer Farbe und einer Fake-Farbe platziert wurde
+			Fragment f = cube.getFragmentByPosition(1);
+			if (f != null) {
+				f.setFace(color, FacePosition.TOP);
+			} else {
+				cube.setFragmentByPosition(1, new Edge(CubeLayer.TOP, CubePosition.FRONTMIDDLE, color, -1)); // -1 ist Fakefarbe, welche später gesetzt wird
+			}
+			
+			this.robot.rotateCubeToCornerPosition();
+			opticalArm.moveToCornerBlock();
+			color = opticalArm.scanBlock();
+			
+			f = cube.getFragmentByPosition(2);
+			if (f != null) {
+				f.setFace(color, FacePosition.TOP);
+			} else {
+				cube.setFragmentByPosition(2, new Corner(CubeLayer.TOP, CubePosition.RIGHTFRONT, color, -1, -1)); // -1 ist Fakefarbe, welche später gesetzt wird
+			}
+			
+			// um 45° weiter drehen, damit er wieder auf Kantenposition steht
+			this.robot.rotateCubeToCornerPosition();
+			
+			// virutellen Cube drehen
+			cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE);
+		}
+		opticalArm.defaultPosition();
 	}
 }

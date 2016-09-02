@@ -61,7 +61,7 @@ public abstract class Fragment {
 	/*
 	 * Setzt eine Oberfl‰che an einer bestimmten Auﬂenseite
 	 */
-	protected void setFace(int color, FacePosition position) {
+	public void setFace(int color, FacePosition position) {
 		switch(position) {
 		case TOP:
 			this.faceTop = new Face(color);

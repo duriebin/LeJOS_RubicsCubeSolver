@@ -2,6 +2,7 @@ package rubicsrobot;
 
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
 import lejos.utility.Delay;
 
 public class Robot {
@@ -22,7 +23,7 @@ public class Robot {
 	public Robot() {
 		this.rotationPlatform = new RotationPlatform(MotorPort.B);
 		this.grappler = new Grappler(MotorPort.A);
-		this.opticalArm = new OpticalArm(MotorPort.C);
+		this.opticalArm = new OpticalArm(MotorPort.C, SensorPort.S1);
 	}
 	
 	/*

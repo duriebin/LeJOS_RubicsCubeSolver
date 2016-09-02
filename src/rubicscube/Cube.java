@@ -110,12 +110,14 @@ public class Cube {
 			this.setFragmentByPosition(swap[1], f1);
 			
 			// Fragmente 1 drehen
-			f1.rotate(rotation, direction);
+			if (f1 != null) {
+				f1.rotate(rotation, direction);
+			}
 			
 			// Fragment 2 muss auch einmal gedreht werden,
 			// weil vom Schema nur 3 Tauschaktionen vorgesehen sind und somit nur 
 			// 3 Ecken/Kanten gedreht werden würden
-			if (counter % 3 == 0) {
+			if (counter % 3 == 0 && f2 != null) {
 				f2.rotate(rotation, direction);
 			}
 			counter++;
