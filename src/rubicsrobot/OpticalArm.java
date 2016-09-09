@@ -1,10 +1,12 @@
 package rubicsrobot;
 
+import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.Color;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 
@@ -30,17 +32,40 @@ public class OpticalArm {
 	}
 	
 	public void moveToCornerBlock() {
-		this.opticalMotor.rotateTo(-95 * 3); // TODO: testen; zu 115° drehen (1:3 Übersetzung)
+		this.opticalMotor.rotateTo(-103 * 3); // zu 103° drehen (1:3 Übersetzung)
 	}
 	
 	public void moveToEdgeBlock() {
-		this.opticalMotor.rotateTo(-115 * 3); // TODO: testen; zu 120° drehen (1:3 Übersetzung)
+		this.opticalMotor.rotateTo(-118 * 3); // zu 118° drehen (1:3 Übersetzung)
 	}
 	
 	public int scanBlock() {
 		float[] rgb = new float[this.sampleSize];
 		this.sampleProvider.fetchSample(rgb, 0);
 		return ColorManager.getInstance().parseRGB(rgb);
+	}
+	
+	public void debugScan() {
+		
+		// Ausgabe der RGB-Werte
+		float[] rgb = new float[this.sampleSize];
+		this.sampleProvider.fetchSample(rgb, 0);
+		LCD.drawString("RGB-Werte: ", 0, 0);
+		for (int i = 1; i <= this.sampleSize; i++) {
+			LCD.drawString(String.valueOf(rgb[i-1]), 1, i);
+		}
+		
+		// Ausgabe des Position des Arms
+		LCD.drawString("Position in Grad * 3:", 0, 4);
+		LCD.drawString(String.valueOf(this.opticalMotor.getTachoCount()), 1, 5);
+	}
+	
+	public void moveOneDegreeClockwise() {
+		this.opticalMotor.rotate(1 * 3);
+	}
+	
+	public void moveOneDegreeCounterclockwise() {
+		this.opticalMotor.rotate(-1 * 3);
 	}
 	
 	/*

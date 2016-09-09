@@ -9,6 +9,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Robot r = new Robot();
+		Debug d = new Debug(r);
+//		d.debugOpticalArm();
 		Logic l = new Logic(r);
 		Cube c = null;
 		try {
