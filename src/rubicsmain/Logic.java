@@ -54,14 +54,12 @@ public class Logic {
 	 */
 	private void ScanCubeSide(Cube cube) throws PositionNotAllowedException, LayerNotAllowedException {
 		OpticalArm opticalArm = this.robot.getOpticalArm();
-		opticalArm.moveToMiddleBlock();
-		int color = opticalArm.scanBlock();
+		int color = opticalArm.scanMiddleBlock();
 		cube.setFragmentByPosition(4, new Middle(CubeLayer.TOP, CubePosition.MIDDLE, color));
 		
 		// rundherum die Farben auslesen
 		for(int i = 0; i < 4; i++) {
-			opticalArm.moveToEdgeBlock();
-			color = opticalArm.scanBlock();
+			color = opticalArm.scanEdgeBlock();
 			
 			// Es kann sein, dass an der Kante bereits ein Fragment mit einer Farbe und einer Fake-Farbe platziert wurde
 			Fragment f = cube.getFragmentByPosition(1);
@@ -72,8 +70,7 @@ public class Logic {
 			}
 			
 			this.robot.rotateCubeToCornerPosition();
-			opticalArm.moveToCornerBlock();
-			color = opticalArm.scanBlock();
+			color = opticalArm.scanCornerBlock();
 			
 			f = cube.getFragmentByPosition(2);
 			if (f != null) {

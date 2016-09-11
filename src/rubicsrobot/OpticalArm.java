@@ -27,22 +27,120 @@ public class OpticalArm {
 		this.sampleSize = this.sampleProvider.sampleSize();
 	}
 	
-	public void moveToMiddleBlock() {
-		this.opticalMotor.rotateTo(-145 * 3); // zu 140° drehen (1:3 Übersetzung)
+	/*
+	 * Behebt das Problem, dass wegem dem Getriebe kleine Bewegungen 
+	 * in die entgegengesetzte Richtung wie die vorangegange Bewegung nicht funktionieren
+	 * Wenn forward = true, dann wird zunächst eine Rückwärtsbewegung durchgeführt 
+	 * und anschließend eine Vorwärtsbewegung (Vorwärts ist hier negative Bewegung)
+	 */
+	private void fixGearTolerance(boolean forward) {
+		int toMove = 15;
+		if (forward) {
+			toMove = -toMove;
+		}
+		this.opticalMotor.rotate(-toMove);
+		this.opticalMotor.rotate(toMove);
 	}
 	
-	public void moveToCornerBlock() {
-		this.opticalMotor.rotateTo(-103 * 3); // zu 103° drehen (1:3 Übersetzung)
+	public int scanMiddleBlock() {
+		// this.opticalMotor.rotateTo(-145 * 3); // zu 140° drehen (1:3 Übersetzung)
+		
+		searchStart();
+		this.opticalMotor.rotate(-30 * 3);
+		return scanBlock(3, 18);
 	}
 	
-	public void moveToEdgeBlock() {
-		this.opticalMotor.rotateTo(-118 * 3); // zu 118° drehen (1:3 Übersetzung)
+	public int scanCornerBlock() {
+		// this.opticalMotor.rotateTo(-103 * 3); // zu 103° drehen (1:3 Übersetzung)
+		
+//		this.opticalMotor.rotateTo(-70 * 3);
+//		fixGearTolerance(true);
+		searchStart();
+		return scanBlock(2, 15);
 	}
 	
-	public int scanBlock() {
+	public int scanEdgeBlock() {
+		// this.opticalMotor.rotateTo(-118 * 3); // zu 118° drehen (1:3 Übersetzung)
+		
+		// Außerhalb des ersten Blockes navigieren
+//		this.opticalMotor.rotateTo(-75 * 3);
+//		fixGearTolerance(true);
+		searchStart();
+		return scanBlock(2, 15);
+	}
+	
+	/*
+	 * Sucht den Anfang des Cubes anhand kleiner Sensorwerte
+	 */
+	private void searchStart() {
+		this.opticalMotor.rotateTo(-50 * 3);
 		float[] rgb = new float[this.sampleSize];
-		this.sampleProvider.fetchSample(rgb, 0);
-		return ColorManager.getInstance().parseRGB(rgb);
+		boolean isSmall = true;
+		
+		// 25 mal wird 3 Grad vorgerückt
+		for (int i = 0; i < 25 && isSmall; i++) {
+			this.sampleProvider.fetchSample(rgb, 0); // Block wird gescannt
+			
+			// Sensor außerhalb Cube => ganz kleine Sensorwerte
+			for (int j = 0; j < rgb.length && isSmall; j++) {
+				
+				// Wenn 2 Stellen hinter dem Komma nicht 0 sind
+				// und die 2. Stelle nicht 1 ist
+				int convertedNumber = (int)(rgb[j] * 100);
+				if (convertedNumber != 0 && convertedNumber != 1) {
+					isSmall = false;
+				}
+			}
+			if (isSmall) {
+				this.opticalMotor.rotate(-3 * 3);
+			}
+		}
+	}
+	
+	/*
+	 * Scannt einen Block ab der aktuellen Position des Arms.
+	 * Es wird dabei immer um 3° vorgerückt und 10 gleiche Farben in Folge gesucht.
+	 * Ergebnis is eine für diese Farbe einheitliche Id.
+	 */
+	private int scanBlock(int degreesToMove, int countOfMoves) {
+		
+		// ColorManager-Instanze zur Überprüfung, ob 10 mal die gleiche Farbe gefunden wurde
+		ColorManager colorManager = new ColorManager();
+		int successCounter = 0;
+		int previousColor = -1;
+		boolean success = false;
+		float[] rgb = new float[this.sampleSize];
+		
+		// countOfMoves mal wird degreesToMove Grad vorgerückt
+		for (int i = 0; i < countOfMoves; i++) {
+			this.sampleProvider.fetchSample(rgb, 0); // Block wird gescannt
+
+			int color = colorManager.parseRGB(rgb);
+			if (previousColor == color) {
+				++successCounter;
+			} else {
+				successCounter = 0;
+			}
+			previousColor = color;
+			if (successCounter == 5) {
+				success = true;
+				break;
+			}
+			this.opticalMotor.rotate(-degreesToMove * 3);
+		}
+		
+		// TODO: Fehlerhandling
+		// Eine Idee wäre, dass der Block nochmals gescannt wird, 
+		// oder dass der Cube 4 mal gedreht wird, damit die Ebene erneut eingescannt werden kann
+		if (!success) {
+			LCD.drawString("Fehler beim Einlesen der Farbe.", 0, 0);
+			LCD.drawString("Farbe konnte nicht richtig gelesen werden.", 0, 0);
+		}
+		
+		// Durchschnittswert berechnen aus den gesamelten Farbenwerten
+		rgb = colorManager.calculateAverage(previousColor);
+		int result = ColorManager.getInstance().parseRGB(rgb); // TODO: result-Variable entferen (zu Debugzwecken erstellt)
+		return result;
 	}
 	
 	public void debugScan() {
