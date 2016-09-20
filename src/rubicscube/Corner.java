@@ -1,6 +1,9 @@
 package rubicscube;
 
 public class Corner extends Fragment {
+	
+	public Corner() { }
+	
 	/*
 	 * Initialisiert ein Eckenstück mit den entsprechenden Seiten
 	 */

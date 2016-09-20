@@ -27,44 +27,18 @@ public class OpticalArm {
 		this.sampleSize = this.sampleProvider.sampleSize();
 	}
 	
-	/*
-	 * Behebt das Problem, dass wegem dem Getriebe kleine Bewegungen 
-	 * in die entgegengesetzte Richtung wie die vorangegange Bewegung nicht funktionieren
-	 * Wenn forward = true, dann wird zunächst eine Rückwärtsbewegung durchgeführt 
-	 * und anschließend eine Vorwärtsbewegung (Vorwärts ist hier negative Bewegung)
-	 */
-	private void fixGearTolerance(boolean forward) {
-		int toMove = 15;
-		if (forward) {
-			toMove = -toMove;
-		}
-		this.opticalMotor.rotate(-toMove);
-		this.opticalMotor.rotate(toMove);
-	}
-	
-	public int scanMiddleBlock() {
-		// this.opticalMotor.rotateTo(-145 * 3); // zu 140° drehen (1:3 Übersetzung)
-		
+	public float[] scanMiddleBlock() {
 		searchStart();
-		this.opticalMotor.rotate(-30 * 3);
-		return scanBlock(3, 18);
+		this.opticalMotor.rotate(-25 * 3);
+		return scanBlock(2, 20);
 	}
 	
-	public int scanCornerBlock() {
-		// this.opticalMotor.rotateTo(-103 * 3); // zu 103° drehen (1:3 Übersetzung)
-		
-//		this.opticalMotor.rotateTo(-70 * 3);
-//		fixGearTolerance(true);
+	public float[] scanCornerBlock() {
 		searchStart();
-		return scanBlock(2, 15);
+		return scanBlock(1, 20);
 	}
 	
-	public int scanEdgeBlock() {
-		// this.opticalMotor.rotateTo(-118 * 3); // zu 118° drehen (1:3 Übersetzung)
-		
-		// Außerhalb des ersten Blockes navigieren
-//		this.opticalMotor.rotateTo(-75 * 3);
-//		fixGearTolerance(true);
+	public float[] scanEdgeBlock() {
 		searchStart();
 		return scanBlock(2, 15);
 	}
@@ -102,7 +76,7 @@ public class OpticalArm {
 	 * Es wird dabei immer um 3° vorgerückt und 10 gleiche Farben in Folge gesucht.
 	 * Ergebnis is eine für diese Farbe einheitliche Id.
 	 */
-	private int scanBlock(int degreesToMove, int countOfMoves) {
+	private float[] scanBlock(int degreesToMove, int countOfMoves) {
 		
 		// ColorManager-Instanze zur Überprüfung, ob 10 mal die gleiche Farbe gefunden wurde
 		ColorManager colorManager = new ColorManager();
@@ -139,8 +113,9 @@ public class OpticalArm {
 		
 		// Durchschnittswert berechnen aus den gesamelten Farbenwerten
 		rgb = colorManager.calculateAverage(previousColor);
-		int result = ColorManager.getInstance().parseRGB(rgb); // TODO: result-Variable entferen (zu Debugzwecken erstellt)
-		return result;
+		return rgb;
+		//int result = ColorManager.getInstance().parseRGB(rgb); // TODO: result-Variable entferen (zu Debugzwecken erstellt)
+		//return result;
 	}
 	
 	public void debugScan() {

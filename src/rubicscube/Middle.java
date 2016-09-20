@@ -1,6 +1,9 @@
 package rubicscube;
 
 public class Middle extends Fragment {
+	
+	public Middle() { }
+	
 	/*
 	 * Initialisiert ein Mittelstück mit der entsprechenden Seite
 	 */

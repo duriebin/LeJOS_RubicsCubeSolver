@@ -71,24 +71,27 @@ public class ColorManager {
 		float tolerance = .04f;
 		ArrayList<Integer> ids = getAllColorGroupIds();
 		Integer bestMatchId = -1;
-		float bestMatchDifference = 1000;
+		float bestMatchDifference = Float.MAX_VALUE;
 		
 		for (Integer id : ids) {
 			ArrayList<float[]> colorGroupValues = getColorGroupValuesById(id);
 			for (float[] colorGroupValue : colorGroupValues) {
 				int matchCounter = 0;
-				float difference = 0;
+
 				for(int j = 0; j < colorGroupValue.length; j++) {
 					
 					// Toleranzbereich prüfen
 					if (rgb[j] > colorGroupValue[j] - tolerance && rgb[j] < colorGroupValue[j] + tolerance) {
 						matchCounter++;
-						difference += Math.abs(rgb[j] - colorGroupValue[j]);
-						
+
 						// Alle 3 Werte müssen im Toleranzbereich liegen und
-						// Gruppe muss ähnlicher sein als die bereits gefundene Gruppe, falls dies der Fall ist.
-						if (matchCounter >= colorGroupValue.length && difference < bestMatchDifference) {
-							bestMatchId = id;
+						if (matchCounter >= colorGroupValue.length) {
+							float difference = Utilitis.calcDifference(rgb, colorGroupValue);
+							
+							// Gruppe muss ähnlicher sein als die bereits gefundene Gruppe, falls dies der Fall ist.
+							if (difference < bestMatchDifference) {
+								bestMatchId = id;
+							}
 						}
 					} else {
 						break;

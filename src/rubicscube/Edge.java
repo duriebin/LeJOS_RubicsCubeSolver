@@ -4,6 +4,8 @@ import lejos.robotics.Color;
 
 public class Edge extends Fragment {
 	
+	public Edge() { }
+	
 	/*
 	 * Initialisiert ein Randstück mit den entsprechenden Seiten
 	 */

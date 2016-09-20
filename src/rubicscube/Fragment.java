@@ -9,8 +9,7 @@ public abstract class Fragment {
 	protected Face faceRight;
 	protected Face faceFront;
 	protected Face faceBack;
-	
-	
+
 	/*
 	 * Konstruktor zum Initialisieren des Fragments mit allen Auﬂenfl‰chen
 	 */
