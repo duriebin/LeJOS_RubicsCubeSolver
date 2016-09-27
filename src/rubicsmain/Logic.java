@@ -81,7 +81,59 @@ public class Logic {
 			cube.setFragmentByPosition(position, f);
 			
 			// Würfel wieder zurückdrehen, damit Ausgangssituation wieder hergestellt ist
+			for (int j = sideNumber - 1; j >= 0; j--) {
+				MoveHandler.doMoveSequence(cube, scanSequenceReverse.get(j));
+			}
+		}
+		
+		// Würfel so drehen, dass er mit echtem Würfel übereinstimmt
+		for (MoveSequence moveSequence : scanSequence) {
+			MoveHandler.doMoveSequence(cube, moveSequence);
+		}
+		
+		return cube;
+	}
+	
+	public Cube forTesting(ArrayList<float[]> scannedColors) {
+		// Alles eingescannt
+		// ==> Farb-Werte parsen und Würfel zusammensetzen
+		// Zunächst die Werte nach Ähnlichkeit sortieren damit immer 9 Elemente einer Farbe entsprechen.
+		// Die Zuordnung zur Position am Würfel bleibt durch die Ausgangsliste erhalten.
+		ArrayList<MoveSequence> scanSequence = RotationSequence.scanSequence;
+		ArrayList<float[]> orderedColors = ColorSorter.sortColors(scannedColors);
+		Cube cube = new Cube();
+		ArrayList<MoveSequence> scanSequenceReverse = RotationSequence.scanSequenceReverse;
+		int foundIndex;
+		int sideNumber;
+		int position;
+		Fragment f;
+		int colorCounter = 0;
+		for (int i = 0; i < orderedColors.size(); i++) {
+			
+			// Immer 9 Farben in einer Reihe sind gleiche Farben
+			if (i % 9 == 0) {
+				colorCounter++;
+			}
+			
+			// Fragmentposition ermitteln (54 verschiedene von 0-53 gibt es)
+			foundIndex = scannedColors.indexOf(orderedColors.get(i));
+			sideNumber = foundIndex / 9; // Seite auf der die Farbe liegt (Einscannreihenfolge)
+			position = parsePosition(foundIndex % 9); // Position 
+			
+			// Würfel so drehen, dass richtige Seite oben ist
 			for (int j = 0; j < sideNumber; j++) {
+				MoveHandler.doMoveSequence(cube, scanSequence.get(j));
+			}
+			
+			f = cube.getFragmentByPosition(position);
+			if (f == null) {
+				f = getFragmentByPosition(position);
+			}
+			f.setFace(colorCounter, FacePosition.TOP);
+			cube.setFragmentByPosition(position, f);
+			
+			// Würfel wieder zurückdrehen, damit Ausgangssituation wieder hergestellt ist
+			for (int j = sideNumber - 1; j >= 0; j--) {
 				MoveHandler.doMoveSequence(cube, scanSequenceReverse.get(j));
 			}
 		}

@@ -4,7 +4,10 @@ import lejos.robotics.Color;
 
 public class Edge extends Fragment {
 	
-	public Edge() { }
+	public Edge() {
+		// Alle Seiten leer setzen
+		super.setAllEmptyFaces();
+	}
 	
 	/*
 	 * Initialisiert ein Randstück mit den entsprechenden Seiten

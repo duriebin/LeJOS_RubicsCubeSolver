@@ -16,11 +16,11 @@ public class RotationSequence {
 	 */
 	public final static ArrayList<MoveSequence> scanSequence = new ArrayList<>(
 			Arrays.asList(new MoveSequence[] { 
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE), new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE), new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE))
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE), new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE), new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE))
 			}));
 	
 	/*
@@ -28,10 +28,10 @@ public class RotationSequence {
 	 */
 	public final static ArrayList<MoveSequence> scanSequenceReverse = new ArrayList<>(
 			Arrays.asList(new MoveSequence[] { 
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE)),
-				new MoveSequence(new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE))
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE)),
+				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE))
 			}));
 }

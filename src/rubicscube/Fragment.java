@@ -108,9 +108,9 @@ public abstract class Fragment {
 	}
 	
 	/*
-	 * Dreht das Fragment im Uhrzeigersinn vertikal
+	 * Dreht das Fragment im Uhrzeigersinn vorwärts
 	 */
-	protected void rotateClockwiseVertical() {
+	protected void rotateClockwiseForward() {
 		Face tmpFace = this.faceBack;
 		this.faceBack = this.faceBottom;
 		this.faceBottom = this.faceFront;
@@ -119,14 +119,36 @@ public abstract class Fragment {
 	}
 	
 	/*
-	 * Dreht das Fragment gegen den Uhrzeigersinn vertikal
+	 * Dreht das Fragment gegen den Uhrzeigersinn vorwärts
 	 */
-	protected void rotateCounterclockwiseVertical() {
+	protected void rotateCounterclockwiseForward() {
 		Face tmpFace = this.faceBack;
 		this.faceBack = this.faceTop;
 		this.faceTop = this.faceFront;
 		this.faceFront = this.faceBottom;
 		this.faceBottom = tmpFace;
+	}
+	
+	/*
+	 * Dreht das Fragment im Uhrzeigersinn vertikal
+	 */
+	protected void rotateClockwiseVertical() {
+		Face tmpFace = this.faceTop;
+		this.faceTop = this.faceLeft;
+		this.faceLeft = this.faceBottom;
+		this.faceBottom = this.faceRight;
+		this.faceRight = tmpFace;
+	}
+	
+	/*
+	 * Dreht das Fragment gegen den Uhrzeigersinn vertikal
+	 */
+	protected void rotateCounterclockwiseVertical() {
+		Face tmpFace = this.faceTop;
+		this.faceTop = this.faceRight;
+		this.faceRight = this.faceBottom;
+		this.faceBottom = this.faceLeft;
+		this.faceLeft = tmpFace;
 	}
 
 	/*
@@ -134,11 +156,20 @@ public abstract class Fragment {
 	 */
 	public void rotate(CubeRotation rotation, CubeDirection direction) {
 		if (rotation == CubeRotation.HORIZONTALBOTTOM ||
-				rotation == CubeRotation.HORIZONTALTOP) {
+				rotation == CubeRotation.HORIZONTALTOP || 
+				rotation == CubeRotation.HORIZONTALWHOLE) {
 			if (direction == CubeDirection.CLOCKWISE) {
 				this.rotateClockwise();
 			} else {
 				this.rotateCounterclockwise();
+			}
+		} else if (rotation == CubeRotation.FORWARDLEFT ||
+				rotation == CubeRotation.FORWARDRIGHT || 
+				rotation == CubeRotation.FORWARDWHOLE) {
+			if (direction == CubeDirection.CLOCKWISE) {
+				this.rotateClockwiseForward();
+			} else {
+				this.rotateCounterclockwiseForward();
 			}
 		} else {
 			if (direction == CubeDirection.CLOCKWISE) {
@@ -154,5 +185,45 @@ public abstract class Fragment {
 		return 	this.faceTop.toString() + this.faceLeft.toString() + 
 				this.faceFront.toString() + this.faceRight.toString() + 
 				this.faceBack.toString() + this.faceBottom.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = true;
+		if (obj instanceof Fragment) {
+			Fragment f = (Fragment)obj;
+
+			if ((f.faceBack != null && this.faceBack != null && !f.faceBack.equals(this.faceBack))
+					|| (f.faceBack == null && this.faceBack != null)
+					|| (f.faceBack != null && this.faceBack == null)) {
+				result = false;
+			} 
+			if ((f.faceBottom != null && this.faceBottom != null && !f.faceBottom.equals(this.faceBottom))
+					|| (f.faceBottom == null && this.faceBottom != null)
+					|| (f.faceBottom != null && this.faceBottom == null)) {
+				result = false;
+			} 
+			if ((f.faceFront != null && this.faceFront != null && !f.faceFront.equals(this.faceFront))
+					|| (f.faceFront == null && this.faceFront != null)
+					|| (f.faceFront != null && this.faceFront == null)) {
+				result = false;
+			} 
+			if ((f.faceLeft != null && this.faceLeft != null && !f.faceLeft.equals(this.faceLeft))
+					|| (f.faceLeft == null && this.faceLeft != null)
+					|| (f.faceLeft != null && this.faceLeft == null)) {
+				result = false;
+			} 
+			if ((f.faceRight != null && this.faceRight != null && !f.faceRight.equals(this.faceRight))
+					|| (f.faceRight == null && this.faceRight != null)
+					|| (f.faceRight != null && this.faceRight == null)) {
+				result = false;
+			} 
+			if ((f.faceTop != null && this.faceTop != null && !f.faceTop.equals(this.faceTop))
+					|| (f.faceTop == null && this.faceTop != null)
+					|| (f.faceTop != null && this.faceTop == null)) {
+				result = false;
+			}
+		}
+		return result;
 	}
 }

@@ -29,17 +29,19 @@ public class OpticalArm {
 	
 	public float[] scanMiddleBlock() {
 		searchStart();
-		this.opticalMotor.rotate(-25 * 3);
+		this.opticalMotor.rotate(-24 * 3);
 		return scanBlock(2, 20);
 	}
 	
 	public float[] scanCornerBlock() {
 		searchStart();
-		return scanBlock(1, 20);
+		this.opticalMotor.rotate(-2 * 3);
+		return scanBlock(1, 18);
 	}
 	
 	public float[] scanEdgeBlock() {
 		searchStart();
+		this.opticalMotor.rotate(-2 * 3);
 		return scanBlock(2, 15);
 	}
 	

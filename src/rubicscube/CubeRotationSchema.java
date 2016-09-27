@@ -16,6 +16,9 @@ public class CubeRotationSchema {
 	
 	private static int[][] verticalRotationSchema = new int[][] { { 2, 0 }, { 20, 2 }, { 18, 20 }, 
 		{ 11, 1 }, { 19, 11 }, { 9, 19 } }; // Schema ist gegen Uhrzeigersinn
+		
+	private static int[][] forwardRotationSchema = new int[][] { { 18, 0 }, { 24, 18 }, { 6, 24 }, 
+		{ 9, 3 }, { 21, 9 }, { 15, 21 } }; // Schema ist gegen Uhrzeigersinn
 	
 	/*
 	 * Kopiert das Schema und verschiebt alle Werte um den angegebenen Faktor(layer)
@@ -38,6 +41,19 @@ public class CubeRotationSchema {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				matrix[i][j] += row * 3; // um n-Zeilen jeden Wert verschieben
+			}
+		}
+		return matrix;
+	}
+	
+	/*
+	 * Kopiert das Schema und verschiebt alle Werte um den angegebenen Faktor(layer)
+	 */
+	private static int[][] getForwardSchemaByLayer(int layer) {
+		int[][] matrix = Utilitis.deepCopyIntMatrix(forwardRotationSchema);
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				matrix[i][j] += layer; // um n-Schichten jeden Wert verschieben
 			}
 		}
 		return matrix;
@@ -67,6 +83,15 @@ public class CubeRotationSchema {
 				break;
 			case VERTICALWHOLE:
 				result = Utilitis.concatAll(Utilitis.deepCopyIntMatrix(verticalRotationSchema), getVerticalSchemaByLayer(1), getVerticalSchemaByLayer(2));
+				break;
+			case FORWARDLEFT:
+				result = Utilitis.deepCopyIntMatrix(forwardRotationSchema);
+				break;
+			case FORWARDRIGHT:
+				result = getForwardSchemaByLayer(2);
+				break;
+			case FORWARDWHOLE:
+				result = Utilitis.concatAll(Utilitis.deepCopyIntMatrix(forwardRotationSchema), getForwardSchemaByLayer(1), getForwardSchemaByLayer(2));
 				break;
 			default:
 				break;

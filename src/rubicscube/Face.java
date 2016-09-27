@@ -25,4 +25,14 @@ public class Face {
 		}
 		return String.valueOf(color);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Face) {
+			if (((Face)obj).color == this.color) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -2,7 +2,10 @@ package rubicscube;
 
 public class Corner extends Fragment {
 	
-	public Corner() { }
+	public Corner() {
+		// Alle Seiten leer setzen
+		super.setAllEmptyFaces();
+	}
 	
 	/*
 	 * Initialisiert ein Eckenstück mit den entsprechenden Seiten

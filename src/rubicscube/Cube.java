@@ -145,4 +145,27 @@ public class Cube {
 		}
 		System.out.println("--------------------End Display Cube--------------------");
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = true;
+		Cube c = null;
+		if (!(obj instanceof Cube)){
+			result = false;
+		} else {
+			c = (Cube)obj;
+		}
+		for (int i = 0; i < 3 && result == true; i++) {
+			for (int j = 0; j < 3&& result == true; j++) {
+				for (int k = 0; k < 3&& result == true; k++) {
+					if (this.cubeFragments.get(i).get(j).get(k) != null) {
+						result = this.cubeFragments.get(i).get(j).get(k).equals(c.cubeFragments.get(i).get(j).get(k));
+					} else if(c.cubeFragments.get(i).get(j).get(k)!= null) {
+						result = false;
+					}
+				}
+			}
+		}
+		return result;
+	}
 }

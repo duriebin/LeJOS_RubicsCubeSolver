@@ -72,6 +72,45 @@ public class RotationTranslationHandler {
 			break;
 		case VERTICALWHOLE:
 			if (direction == CubeDirection.CLOCKWISE) {
+				robot.rotatePlatformCounterclockwise();
+				robot.flipCube();
+				robot.rotatePlatformClockwise();
+			} else {
+				robot.rotatePlatformClockwise();
+				robot.flipCube();
+				robot.rotatePlatformCounterclockwise();
+			}
+			break;
+		case FORWARDLEFT:
+			robot.rotatePlatformClockwise();
+			robot.flipCube();
+			if (direction == CubeDirection.CLOCKWISE) {
+				robot.rotateCubeCounterclockwise(); // umgedreht, weil Ansicht von der Seite die Richtung vertauscht
+			} else {
+				robot.rotateCubeClockwise();
+			}
+			for (int i = 0; i < 2; i++) {
+				robot.rotatePlatformCounterclockwise();
+			}
+			robot.flipCube();
+			robot.rotatePlatformClockwise();
+			break;
+		case FORWARDRIGHT:
+			robot.rotatePlatformCounterclockwise();
+			robot.flipCube();
+			if (direction == CubeDirection.CLOCKWISE) {
+				robot.rotateCubeClockwise();
+			} else {
+				robot.rotateCubeCounterclockwise();
+			}
+			for (int i = 0; i < 2; i++) {
+				robot.rotatePlatformCounterclockwise();
+			}
+			robot.flipCube();
+			robot.rotatePlatformCounterclockwise();
+			break;
+		case FORWARDWHOLE:
+			if (direction == CubeDirection.CLOCKWISE) {
 				for (int i = 0; i < 3; i++) {
 					robot.flipCube();
 				}

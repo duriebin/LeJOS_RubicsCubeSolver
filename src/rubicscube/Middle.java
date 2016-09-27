@@ -2,7 +2,10 @@ package rubicscube;
 
 public class Middle extends Fragment {
 	
-	public Middle() { }
+	public Middle() {
+		// Alle Seiten leer setzen
+		super.setAllEmptyFaces();
+	}
 	
 	/*
 	 * Initialisiert ein Mittelstück mit der entsprechenden Seite
