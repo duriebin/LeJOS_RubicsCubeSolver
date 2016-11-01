@@ -9,6 +9,10 @@ public class Edge extends Fragment {
 		super.setAllEmptyFaces();
 	}
 	
+	public Edge(int colorTop, int colorLeft, int colorFront, int colorRight, int colorBack, int colorBottom) {
+		super(colorTop, colorLeft, colorFront, colorRight, colorBack, colorBottom);
+	}
+	
 	/*
 	 * Initialisiert ein Randstück mit den entsprechenden Seiten
 	 */

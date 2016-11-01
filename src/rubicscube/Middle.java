@@ -7,6 +7,10 @@ public class Middle extends Fragment {
 		super.setAllEmptyFaces();
 	}
 	
+	public Middle(int colorTop, int colorLeft, int colorFront, int colorRight, int colorBack, int colorBottom) {
+		super(colorTop, colorLeft, colorFront, colorRight, colorBack, colorBottom);
+	}
+	
 	/*
 	 * Initialisiert ein Mittelstück mit der entsprechenden Seite
 	 */

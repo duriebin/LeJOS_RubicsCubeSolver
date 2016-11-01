@@ -1,14 +1,54 @@
 package rubicscube;
 
+import java.util.ArrayList;
+
 import lejos.robotics.Color;
 
-public abstract class Fragment {
+public abstract class Fragment implements Cloneable {
 	protected Face faceTop;
 	protected Face faceBottom;
 	protected Face faceLeft;
 	protected Face faceRight;
 	protected Face faceFront;
 	protected Face faceBack;
+	
+	public Face getFaceTop() {
+		return faceTop;
+	}
+
+	public Face getFaceBottom() {
+		return faceBottom;
+	}
+
+	public Face getFaceLeft() {
+		return faceLeft;
+	}
+
+	public Face getFaceRight() {
+		return faceRight;
+	}
+
+	public Face getFaceFront() {
+		return faceFront;
+	}
+
+	public Face getFaceBack() {
+		return faceBack;
+	}
+	
+	/*
+	 * Gibt eine Auflistung aller Farben zurück
+	 */
+	public ArrayList<Integer> getColors() {
+		ArrayList<Integer> result = new ArrayList<>();
+		result.add(getFaceTop().getColor());
+		result.add(getFaceLeft().getColor());
+		result.add(getFaceFront().getColor());
+		result.add(getFaceRight().getColor());
+		result.add(getFaceBack().getColor());
+		result.add(getFaceBottom().getColor());
+		return result;
+	}
 
 	/*
 	 * Konstruktor zum Initialisieren des Fragments mit allen Außenflächen
@@ -157,7 +197,8 @@ public abstract class Fragment {
 	public void rotate(CubeRotation rotation, CubeDirection direction) {
 		if (rotation == CubeRotation.HORIZONTALBOTTOM ||
 				rotation == CubeRotation.HORIZONTALTOP || 
-				rotation == CubeRotation.HORIZONTALWHOLE) {
+				rotation == CubeRotation.HORIZONTALWHOLE ||
+				rotation == CubeRotation.HORIZONTALMIDDLE) {
 			if (direction == CubeDirection.CLOCKWISE) {
 				this.rotateClockwise();
 			} else {
@@ -165,7 +206,8 @@ public abstract class Fragment {
 			}
 		} else if (rotation == CubeRotation.FORWARDLEFT ||
 				rotation == CubeRotation.FORWARDRIGHT || 
-				rotation == CubeRotation.FORWARDWHOLE) {
+				rotation == CubeRotation.FORWARDWHOLE ||
+				rotation == CubeRotation.FORWARDMIDDLE) {
 			if (direction == CubeDirection.CLOCKWISE) {
 				this.rotateClockwiseForward();
 			} else {
@@ -178,6 +220,10 @@ public abstract class Fragment {
 				this.rotateCounterclockwiseVertical();
 			}
 		}
+	}
+	
+	public int getPosition(Cube c) {
+		return c.findCubePositionByReference(this);
 	}
 	
 	@Override
@@ -225,5 +271,36 @@ public abstract class Fragment {
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	protected Object clone() {
+		Fragment f;
+		if (this instanceof Middle) {
+			f = new Middle(
+					this.faceTop.getColor(), 
+					this.faceLeft.getColor(), 
+					this.faceFront.getColor(), 
+					this.faceRight.getColor(), 
+					this.faceBack.getColor(), 
+					this.faceBottom.getColor());
+		} else if (this instanceof Edge) {
+			f = new Edge(
+					this.faceTop.getColor(), 
+					this.faceLeft.getColor(), 
+					this.faceFront.getColor(), 
+					this.faceRight.getColor(), 
+					this.faceBack.getColor(), 
+					this.faceBottom.getColor());
+		} else {
+			f = new Corner(
+					this.faceTop.getColor(), 
+					this.faceLeft.getColor(), 
+					this.faceFront.getColor(), 
+					this.faceRight.getColor(), 
+					this.faceBack.getColor(), 
+					this.faceBottom.getColor());
+		}
+		return f;
 	}
 }

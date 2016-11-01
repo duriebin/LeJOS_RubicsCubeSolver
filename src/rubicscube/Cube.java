@@ -2,7 +2,7 @@ package rubicscube;
 
 import java.util.ArrayList;
 
-public class Cube {
+public class Cube implements Cloneable {
 	
 	/*
 	 * 3x3x3 ArrayLists zur Abbildung des Rubiks Cubes
@@ -47,6 +47,43 @@ public class Cube {
 	}
 	
 	/*
+	 * Gibt die Position eines Fragmentes zurück.
+	 * Wird das Fragment nicht gefunden, wird -1 zurückgegeben.
+	 */
+	public int findCubePositionByReference(Fragment fragment) {
+		int position = -1;
+		for (int i = 0; i < this.cubeFragments.size(); i++) {
+			ArrayList<ArrayList<Fragment>> ml = this.cubeFragments.get(i);
+			for (int j = 0; j < ml.size(); j++) {
+				ArrayList<Fragment> il = ml.get(j);
+				for(int k = 0; k < il.size(); k++) {
+					if (il.get(k) == fragment) {
+						position = i * 9 + j * 3 + k; // Berechnen der Position
+					}
+				}
+			}
+		}
+		return position;
+	}
+	
+	/*
+	 * Gibt alle Fragmente, welche der übergebenen Klasse entsprechen, zurück
+	 */
+	public ArrayList<Fragment> getFragmentsByType(Class<?> type) {
+		ArrayList<Fragment> result = new ArrayList<>();
+		for (ArrayList<ArrayList<Fragment>> ml : this.cubeFragments) {
+			for (ArrayList<Fragment> il : ml) {
+				for(Fragment f : il) {
+					if (f != null && f.getClass() == type) {
+						result.add(f);
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	/*
 	 * Setzt ein Mittel-, Rand- oder Eckenstück an der Position im Cube
 	 */
 	public void setCubeFragment(CubeLayer layer, CubePosition position, Fragment fragment) {
@@ -79,10 +116,33 @@ public class Cube {
 	 * 		
 	 */
 	public Fragment getFragmentByPosition(int position) {
-		int layer = position / 9;
-		int row = (position % 9) / 3;
-		int cell = position % 3;
+		int layer = getLayer(position);
+		int row = getRow(position);
+		int cell = getColumn(position);
 		return cubeFragments.get(layer).get(row).get(cell);
+	}
+	
+	/*
+	 * Gibt die Schicht anhand der übergeben Position (0-26) zurück
+	 */
+	public static int getLayer(int pos) {
+		return pos / 9;
+	}
+	
+	/*
+	 * Gibt die Reihe (von oben betrachtet eine horizontale Scheibe)
+	 * anhand der übergebenen Position (0-26) zurück
+	 */
+	public static int getRow(int pos) {
+		return (pos % 9) / 3;
+	}
+	
+	/*
+	 * Gibt die Spalte (von oben betrachtet eine vertikale Scheibe)
+	 * anhand der übergbenen Position (0-26) zurück
+	 */
+	public static int getColumn(int pos) {
+		return pos % 3;
 	}
 	
 	/*
@@ -98,7 +158,7 @@ public class Cube {
 	/*
 	 * Dreht den Cube einmal in der entsprechenden Rotationsebene und Richtung
 	 */
-	public void rotateCube(CubeRotation rotation, CubeDirection direction) {
+	public Move rotateCube(CubeRotation rotation, CubeDirection direction) {
 		int[][] schema = CubeRotationSchema.getRotationSchema(rotation, direction);
 		int counter = 0;
 		for (int[] swap : schema) {
@@ -122,6 +182,8 @@ public class Cube {
 			}
 			counter++;
 		}
+		
+		return new Move(rotation, direction);
 	}
 	
 	/*
@@ -167,5 +229,17 @@ public class Cube {
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	public Object clone() {
+		Cube c = new Cube();
+		for (int i = 0; i < 3*3*3; i++) {
+			Fragment f = this.getFragmentByPosition(i);
+			if (f != null) {
+				c.setFragmentByPosition(i, (Fragment)f.clone());
+			}
+		}
+		return c;
 	}
 }

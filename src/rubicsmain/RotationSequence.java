@@ -34,4 +34,45 @@ public class RotationSequence {
 				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE)),
 				new MoveSequence(new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE), new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE))
 			}));
+	
+	/*
+	 * Befördert das untenliegende Eckfragment in das darüber liegende Eckfragment, 
+	 * wenn die erste Schicht mit den Ecken positioniert wird.
+	 * Vorausgesetzt die Farbe für oben liegt an der Vorderseite.
+	 */
+	public final static MoveSequence firstLayerCornerBottomToTopColorFrontSequence = new MoveSequence(
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
+		);
+	
+	
+	/*
+	 * Befördert das untenliegende Eckfragment in das darüber liegende Eckfragment, 
+	 * wenn die erste Schicht mit den Ecken positioniert wird.
+	 * Vorausgesetzt die Farbe für oben liegt an der rechten Seite.
+	 */
+	public final static MoveSequence firstLayerCornerBottomToTopColorRightSequence = new MoveSequence( 
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
+		);
+	
+	
+	/*
+	 * Befördert das untenliegende Eckfragment in das darüber liegende Eckfragment, 
+	 * wenn die erste Schicht mit den Ecken positioniert wird.
+	 * Vorausgesetzt die Farbe für oben liegt an der unteren Seite.
+	 */
+	public final static MoveSequence firstLayerCornerBottomToTopColorBottomSequence = new MoveSequence(  
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
+		);
 }

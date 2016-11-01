@@ -69,11 +69,17 @@ public class CubeRotationSchema {
 			case HORIZONTALBOTTOM:
 				result = getHorizontalSchemaByLayer(2);
 				break;
+			case HORIZONTALMIDDLE:
+				result = getHorizontalSchemaByLayer(1);
+				break;
 			case HORIZONTALTOP:
 				result = Utilitis.deepCopyIntMatrix(horizontalRotationSchema);
 				break;
 			case VERTICALBACK:
 				result = getVerticalSchemaByLayer(2);
+				break;
+			case VERTICALMIDDLE:
+				result = getVerticalSchemaByLayer(1);
 				break;
 			case VERTICALFRONT: 
 				result = Utilitis.deepCopyIntMatrix(verticalRotationSchema);
@@ -86,6 +92,9 @@ public class CubeRotationSchema {
 				break;
 			case FORWARDLEFT:
 				result = Utilitis.deepCopyIntMatrix(forwardRotationSchema);
+				break;
+			case FORWARDMIDDLE:
+				result = getForwardSchemaByLayer(1);
 				break;
 			case FORWARDRIGHT:
 				result = getForwardSchemaByLayer(2);

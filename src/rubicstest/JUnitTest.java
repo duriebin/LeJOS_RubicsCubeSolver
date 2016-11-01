@@ -11,9 +11,17 @@ import rubicscube.Cube;
 import rubicscube.CubeDirection;
 import rubicscube.CubeRotation;
 import rubicsmain.ColorSorter;
+import rubicsmain.HumanSolvingAlgorithm;
 import rubicsmain.Logic;
 
 public class JUnitTest {
+	
+	@Test
+	public void startSolvingTest() {
+		Cube cube = FakeData.getFakeCube();
+		HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+		alg.solveCube();
+	}
 	
 	@Test
 	public void startColorSortingTest() {
@@ -158,6 +166,39 @@ public class JUnitTest {
 		cube.rotateCube(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE);
 		cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE);
 		cube.rotateCube(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.CLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.HORIZONTALMIDDLE, CubeDirection.CLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
+		
+		
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.COUNTERCLOCKWISE);
+		cube.rotateCube(CubeRotation.VERTICALMIDDLE, CubeDirection.CLOCKWISE);
 		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);
 	}
 }

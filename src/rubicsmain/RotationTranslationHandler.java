@@ -16,6 +16,8 @@ public class RotationTranslationHandler {
 	 * sind für manche Operationen mehrere mechanische Schritte notwendig.
 	 */
 	public static void doRobotRotation(Robot robot, CubeRotation rotation, CubeDirection direction) {
+		// TODO: Middle-Rotations hinzufügen
+		
 		switch(rotation) {
 		case HORIZONTALBOTTOM:
 			if (direction == CubeDirection.CLOCKWISE) {
