@@ -41,12 +41,24 @@ public abstract class Fragment implements Cloneable {
 	 */
 	public ArrayList<Integer> getColors() {
 		ArrayList<Integer> result = new ArrayList<>();
-		result.add(getFaceTop().getColor());
-		result.add(getFaceLeft().getColor());
-		result.add(getFaceFront().getColor());
-		result.add(getFaceRight().getColor());
-		result.add(getFaceBack().getColor());
-		result.add(getFaceBottom().getColor());
+		if (getFaceTop().getColor() != -1) {
+			result.add(getFaceTop().getColor());
+		}
+		if (getFaceLeft().getColor() != -1) {
+			result.add(getFaceLeft().getColor());
+		}
+		if (getFaceFront().getColor() != -1) {
+			result.add(getFaceFront().getColor());
+		}
+		if (getFaceRight().getColor() != -1) {
+			result.add(getFaceRight().getColor());
+		}
+		if (getFaceBack().getColor() != -1) {
+			result.add(getFaceBack().getColor());
+		}
+		if (getFaceBottom().getColor() != -1) {
+			result.add(getFaceBottom().getColor());
+		}
 		return result;
 	}
 

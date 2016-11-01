@@ -75,4 +75,32 @@ public class RotationSequence {
 			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
 			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
 		);
+	
+	/*
+	 * Befördert eine Kante der untersten Ebene in die linke Lücke der mittleren Ebene
+	 */
+	public final static MoveSequence middleLayerEdgeLeftSequence = new MoveSequence(  
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.CLOCKWISE)
+		);
+	
+	/*
+	 * Befördert eine Kante der untersten Ebene in die rechte Lücke der mittleren Ebene
+	 */
+	public final static MoveSequence middleLayerEdgeRightSequence = new MoveSequence(  
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.COUNTERCLOCKWISE)
+		);
 }

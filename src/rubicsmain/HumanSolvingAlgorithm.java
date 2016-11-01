@@ -35,6 +35,151 @@ public class HumanSolvingAlgorithm {
 		this.edges = this.cube.getFragmentsByType(Edge.class);
 		
 		solveTopLayer(resultSequence);
+		solveMiddleLayer(resultSequence);
+		
+		return resultSequence;
+	}
+	
+	/*
+	 * Löst die mittlere Schicht
+	 */
+	private MoveSequence solveMiddleLayer(MoveSequence resultSequence) {
+		
+		// Alle benötigten Kantenstücke suchen
+		ArrayList<Fragment> neededFragments = new ArrayList<>();
+		neededFragments.add(findFragment(Edge.class, getRightLayerColor(), getBackLayerColor()));
+		neededFragments.add(findFragment(Edge.class, getBackLayerColor(), getLeftLayerColor()));
+		neededFragments.add(findFragment(Edge.class, getFrontLayerColor(), getRightLayerColor()));
+		neededFragments.add(findFragment(Edge.class, getFrontLayerColor(), getLeftLayerColor()));
+		
+		Fragment currentFragment;
+		Fragment middleFragment;
+		int pos;
+		int layer;
+		int row;
+		int column;
+		boolean doneSth;
+		
+		while (neededFragments.size() > 0) {
+			doneSth = false;
+			for (int i = neededFragments.size() - 1; i >= 0; i--) {
+				currentFragment = neededFragments.get(i);
+				pos = currentFragment.getPosition(this.cube);
+				layer = Cube.getLayer(pos);
+				
+				// Gesuchtes Fragment befindet sich in unterer Ebene
+				if (layer == 2) {
+					
+					// Index 0 ist immer die Farbe, welche nicht nach unten zeigt
+					middleFragment = findFragment(Middle.class, currentFragment.getColors().get(0));
+					int middlePos = middleFragment.getPosition(this.cube);
+					int middleRow = Cube.getRow(middlePos);
+					int middleColumn = Cube.getColumn(middlePos);
+					if (middleRow == 1) {
+						if (middleColumn == 0) {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE));
+						} else {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+						}
+					} else if (middleRow == 2) {
+						for (int j = 0; j < 2; j++) {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE));
+						}
+					}
+					
+					// gesuchtes Mittelstücke ist nun an Vorderseite
+					// Jetzt Kante darunter platzieren
+					pos = currentFragment.getPosition(this.cube);
+					row = Cube.getRow(pos);
+					column = Cube.getColumn(pos);
+					if (row == 1) {
+						if (column == 0) {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE));
+						} else {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE));
+						}
+					} else if (row == 2) {
+						for (int j = 0; j < 2; j++) {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE));
+						}
+					}
+					
+					// Kante ist darunter platziert
+					// Jetzt Kante in Lücke positionieren
+					// Index 1 ist untere Farbe der Kante
+					if (currentFragment.getColors().get(1) == getLeftLayerColor()) {
+						resultSequence.getMoves().addAll(RotationSequence.middleLayerEdgeLeftSequence.getMoves());
+						MoveHandler.doMoveSequence(this.cube, RotationSequence.middleLayerEdgeLeftSequence);
+					} else {
+						resultSequence.getMoves().addAll(RotationSequence.middleLayerEdgeRightSequence.getMoves());
+						MoveHandler.doMoveSequence(this.cube, RotationSequence.middleLayerEdgeRightSequence);
+					}
+					
+					// Kante ist platziert
+					neededFragments.remove(currentFragment);
+					doneSth = true;
+				} else {
+					
+					// gesuchte Kante ist in Mittelschicht --> muss nach unten, außer wenn bereits richtig
+					if (!doneSth && i == 0) {
+						boolean isCorrect = false;
+						row = Cube.getRow(pos);
+						column = Cube.getColumn(pos);
+						if (row == 0) {
+							if (currentFragment.getFaceFront().getColor() == getFrontLayerColor()) {
+								if (column == 0) {
+									if (currentFragment.getFaceLeft().getColor() == getLeftLayerColor()) {
+										isCorrect = true;
+									}
+								} else {
+									if (currentFragment.getFaceRight().getColor() == getRightLayerColor()) {
+										isCorrect = true;
+									}
+								}
+							}
+						} else {
+							if (currentFragment.getFaceBack().getColor() == getBackLayerColor()) {
+								if (column == 0) {
+									if (currentFragment.getFaceLeft().getColor() == getLeftLayerColor()) {
+										isCorrect = true;
+									}
+								} else {
+									if (currentFragment.getFaceRight().getColor() == getRightLayerColor()) {
+										isCorrect = true;
+									}
+								}
+							}
+						}
+						
+						// Fragment ist bereits an richtiger Stelle --> muss nichts mehr bemacht werden
+						// Ansonsten eine beliebige Kante an jene Stelle einfügen
+						if (isCorrect) {
+							neededFragments.remove(currentFragment);
+						} else {
+							
+							// Fragment in vorderste Ebene bringen
+							if (row == 2) {
+								if (column == 0) {
+									resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE));
+								} else {
+									resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+								}
+							}
+							
+							// Fragment austauschen
+							if (column == 0) {
+								resultSequence.getMoves().addAll(RotationSequence.middleLayerEdgeLeftSequence.getMoves());
+								MoveHandler.doMoveSequence(this.cube, RotationSequence.middleLayerEdgeLeftSequence);
+							} else {
+								resultSequence.getMoves().addAll(RotationSequence.middleLayerEdgeRightSequence.getMoves());
+								MoveHandler.doMoveSequence(this.cube, RotationSequence.middleLayerEdgeRightSequence);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		return resultSequence;
 	}
 	
