@@ -65,4 +65,11 @@ public enum CubeRotation {
 		}
 		return result;
 	}
+	
+	/*
+	 * Gibt eine zufällige Rotation zurück
+	 */
+	public static CubeRotation getRandom() {
+        return values()[(int) (Math.random() * values().length)];
+    }
 }

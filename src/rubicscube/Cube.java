@@ -1,6 +1,7 @@
 package rubicscube;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Cube implements Cloneable {
 	
@@ -184,6 +185,91 @@ public class Cube implements Cloneable {
 		}
 		
 		return new Move(rotation, direction);
+	}
+	
+	/*
+	 * Überprüft ob der Würfel gelöst wurde.
+	 */
+	public boolean isSolved() {
+		boolean isSolved = true;
+		for (int i = 1; i <= 6 && isSolved; i++) {
+			String level = getLevelFaces(i);
+			char levelColor = level.charAt(4);
+			for (int j = 0; j < level.length(); j++) {
+				if (level.charAt(j) != levelColor) {
+					isSolved = false;
+					break;
+				}
+			}
+		}
+		return isSolved;
+	}
+	
+	/*
+	 * Gibt eine Auflistung aller Oberflächenfarben einer Ebene zurück.
+	 * 
+	 * Darstellung der Level(Ebenen):
+	 * 
+	 * 		   ////////////////
+	 * 		  /		  1		 /
+	 * 		 /				/ 
+	 * 		////////////////
+	 * 		/    /    /    /
+	 * 		////////////////
+	 * 	2	/    / 3  /    /	4
+	 * 		////////////////
+	 * 		/    /    /    /
+	 * 		////////////////
+	 * 				6
+	 * 
+	 */
+	public String getLevelFaces(int level) {
+		StringBuilder result = new StringBuilder();
+		
+		// Obere und untere Ebene
+		if (level == 1 || level == 6) {
+			int layer = 0;
+			if (level == 6) {
+				layer = 2;
+			}
+			ArrayList<ArrayList<Fragment>> layerFragments = this.cubeFragments.get(layer);
+			for (ArrayList<Fragment> rowFragments : layerFragments) {
+				for(Fragment f : rowFragments) {
+					result.append(f.getFaceBottom().getColor() == -1 ? f.getFaceTop().getColor() : f.getFaceBottom().getColor());
+				}
+			}
+		} else if (level == 2 || level == 4) { // Linke und rechte Ebene
+			int column = 0;
+			if (level == 4) {
+				column = 2;
+			}
+			for (ArrayList<ArrayList<Fragment>> layerFragments : this.cubeFragments) {
+				for (ArrayList<Fragment> rowFragments : layerFragments) {
+					Fragment f = rowFragments.get(column);
+					result.append(f.getFaceLeft().getColor() == -1 ? f.getFaceRight().getColor() : f.getFaceLeft().getColor());
+				}
+			}
+		} else if (level == 3 || level == 5) { // vordere und hintere Ebene
+			int row = 0;
+			if (level == 5) {
+				row = 2;
+			}
+			for (ArrayList<ArrayList<Fragment>> layerFragments : this.cubeFragments) {
+				ArrayList<Fragment> rowFragments = layerFragments.get(row);
+				for (Fragment f : rowFragments) {
+					result.append(f.getFaceFront().getColor() == -1 ? f.getFaceBack().getColor() : f.getFaceFront().getColor());
+				}
+			}
+		}
+		
+		return result.toString();
+	}
+	
+	/*
+	 * Führt eine zufällige Rotation am Würfel aus
+	 */
+	public Move performRandomMove() {
+		return this.rotateCube(CubeRotation.getRandom(), CubeDirection.getRandom());
 	}
 	
 	/*

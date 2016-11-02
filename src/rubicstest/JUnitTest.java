@@ -24,6 +24,17 @@ public class JUnitTest {
 	}
 	
 	@Test
+	public void startRandomSolvingTest() {
+		Cube cube = FakeData.getFakeCube();
+		for (int i = 0; i < 100; i++) {
+			cube.performRandomMove();
+		}
+		HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+		alg.solveCube();
+		assertEquals(true, cube.isSolved());
+	}
+	
+	@Test
 	public void startColorSortingTest() {
 //		ArrayList<float[]> colors = FakeData.getFakeColorsCube();
 //		ArrayList<float[]> colors = FakeData.getFakeColorsCube2();

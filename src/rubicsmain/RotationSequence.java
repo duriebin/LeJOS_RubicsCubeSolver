@@ -41,9 +41,9 @@ public class RotationSequence {
 	 * Vorausgesetzt die Farbe für oben liegt an der Vorderseite.
 	 */
 	public final static MoveSequence firstLayerCornerBottomToTopColorFrontSequence = new MoveSequence(
-			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
-			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
 			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
 			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
 		);
 	
@@ -102,5 +102,36 @@ public class RotationSequence {
 			new Move(CubeRotation.VERTICALFRONT, CubeDirection.CLOCKWISE),
 			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
 			new Move(CubeRotation.VERTICALFRONT, CubeDirection.COUNTERCLOCKWISE)
+		);
+	
+	/*
+	 * OLL 2Look 2
+	 * Löst das untenliegende Kreuz der unteren Schicht, 
+	 * wenn sich zwei richtige Farben bereits gegenüber befinden.
+	 * Die richtigen Farben müssen sich in der mittleren Zeile gegenüberliegen.
+	 */
+	public final static MoveSequence bottomLayerCrossTwoAcrossSequence = new MoveSequence(
+			new Move(CubeRotation.VERTICALBACK, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALBACK, CubeDirection.CLOCKWISE)
+		);
+	
+	/*
+	 * OLL 2Look 3
+	 * Löst das untenliegende Kreuz der unteren Schicht, 
+	 * wenn sich zwei richtige Farben nebeneinander befinden (hinten und rechts).
+	 */
+	public final static MoveSequence bottomLayerCrossTwoBesideSequence = new MoveSequence(
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALWHOLE, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALFRONT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE)
 		);
 }

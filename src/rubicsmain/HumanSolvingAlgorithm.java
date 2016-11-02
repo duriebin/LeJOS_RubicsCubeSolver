@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import rubicscube.Corner;
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
+import rubicscube.CubeLayer;
 import rubicscube.CubeRotation;
 import rubicscube.Edge;
 import rubicscube.Fragment;
@@ -36,7 +37,65 @@ public class HumanSolvingAlgorithm {
 		
 		solveTopLayer(resultSequence);
 		solveMiddleLayer(resultSequence);
+		solveBottomLayer(resultSequence);
 		
+		return resultSequence;
+	}
+	
+	/*
+	 * Löst die untere Schicht nach der Fridrich Methode (4LLL).
+	 * Siehe: http://www.speedcube.de/fridrich.php
+	 * https://de.wikibooks.org/wiki/Zauberw%C3%BCrfel/_3x3x3/_Fridrich
+	 * 
+	 * Zunächst alle Steine so drehen, dass die richtige Farbe unten ist (Anordnung egal). 
+	 * Siehe: http://www.speedcube.de/fridrich_2look_oll.php
+	 * 
+	 * Anschließend die Anordnung korrigieren.
+	 */
+	private MoveSequence solveBottomLayer(MoveSequence resultSequence) {
+		int bottomLayerColor = getBottomLayerColor();
+		int[] rotationCounter = new int[] { 0 };
+		
+		// Kanten nach unten ausrichten
+		if (PatternStorage.OLL2Look1.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCrossTwoAcrossSequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCrossTwoAcrossSequence);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCrossTwoBesideSequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCrossTwoBesideSequence);
+		} else if (PatternStorage.OLL2Look2.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCrossTwoAcrossSequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCrossTwoAcrossSequence);
+		} 
+		else if (PatternStorage.OLL2Look3.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCrossTwoBesideSequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCrossTwoBesideSequence);
+		}
+		
+		return resultSequence;
+	}
+	
+	/*
+	 * Berücksichtigt bei den Patterns den RotationCounter
+	 */
+	private MoveSequence doRotationCounter(MoveSequence resultSequence, int rotationCounter) {
+		switch (rotationCounter) {
+		case 1:
+			resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+			break;
+		case 2:
+			for (int i = 0; i < 2; i++) {
+				resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+			}
+			break;
+		case 3:
+			resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.COUNTERCLOCKWISE));
+			break;
+			default:
+				break;
+		}
 		return resultSequence;
 	}
 	
@@ -196,6 +255,7 @@ public class HumanSolvingAlgorithm {
 			int pos = neededFragment.getPosition(this.cube);
 			int row = Cube.getRow(pos);
 			int column = Cube.getColumn(pos);
+			int layer = Cube.getLayer(pos);
 			
 			// Horizontalrotation notwendig
 			if (row > 0) {
@@ -206,19 +266,37 @@ public class HumanSolvingAlgorithm {
 					if (column == 0) {
 						dir = CubeDirection.COUNTERCLOCKWISE;
 					}
-					resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.getHorizontalRotation(pos), dir));
-				} else {
 					
-					// Fragment ist hinten --> zweimal drehen (Richtung egal)
-					for (int j = 0; j < 2; j++) {
-						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.getHorizontalRotation(pos), CubeDirection.COUNTERCLOCKWISE));
+					// Im ersten Durchgang darf die obere Schicht ohne Probleme verdreht werden.
+					// Bei weiteren Durchgängen darf dies jedoch nicht mehr erfolgen, sonst verdreht man ggf etwas.
+					if (layer != 0 || i == 0) {
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.getHorizontalRotation(pos), dir));
+					} else {
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.VERTICALMIDDLE, dir));
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, dir));
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.VERTICALMIDDLE, dir.swap()));
+					}
+				} else {
+					// Im ersten Durchgang darf die obere Schicht ohne Probleme verdreht werden.
+					// Bei weiteren Durchgängen darf dies jedoch nicht mehr erfolgen, sonst verdreht man ggf etwas.
+					if (layer != 0 || i == 0) {
+						
+						// Fragment ist hinten --> zweimal drehen (Richtung egal)
+						for (int j = 0; j < 2; j++) {
+							resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.getHorizontalRotation(pos), CubeDirection.COUNTERCLOCKWISE));
+						}
+					} else {
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.COUNTERCLOCKWISE));
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE));
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.FORWARDMIDDLE, CubeDirection.CLOCKWISE));
+						resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE));
 					}
 				}
 			}
 			
 			// Jetzt ist das Fragment auf der vorderen Seite und muss an seinen Platz gedreht werden
 			pos = neededFragment.getPosition(this.cube);
-			int layer = Cube.getLayer(pos);
+			layer = Cube.getLayer(pos);
 			row = Cube.getRow(pos);
 			column = Cube.getColumn(pos);
 			
@@ -289,7 +367,7 @@ public class HumanSolvingAlgorithm {
 			int column = Cube.getColumn(pos);
 			
 			// Fragment ist noch nicht richtig
-			if (pos	!= 2 && neededFragment.getFaceTop().getColor() != topLayerColor) {
+			if (pos	!= 2 || (pos == 2 && neededFragment.getFaceTop().getColor() != topLayerColor)) {
 				
 				// Zunächst Stein auf vordere untere rechte Ecke befördern
 				// Oberste Schicht
