@@ -74,6 +74,37 @@ public class HumanSolvingAlgorithm {
 			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCrossTwoBesideSequence);
 		}
 		
+		// Ecken nach unten ausrichten
+		if (PatternStorage.OLL04.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL04Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL04Sequence);
+		} else if (PatternStorage.OLL05.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL05Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL05Sequence);
+		} else if (PatternStorage.OLL06.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL06Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL06Sequence);
+		} else if (PatternStorage.OLL07.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL07Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL07Sequence);
+		} else if (PatternStorage.OLL08.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL08Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL08Sequence);
+		} else if (PatternStorage.OLL09.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL09Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL09Sequence);
+		} else if (PatternStorage.OLL10.match(bottomLayerColor, this.cube, rotationCounter)) {
+			doRotationCounter(resultSequence, rotationCounter[0]);
+			resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerOLL10Sequence.getMoves());
+			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL10Sequence);
+		} 
+		
 		return resultSequence;
 	}
 	

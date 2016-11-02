@@ -134,4 +134,101 @@ public class RotationSequence {
 			new Move(CubeRotation.VERTICALFRONT, CubeDirection.COUNTERCLOCKWISE),
 			new Move(CubeRotation.VERTICALWHOLE, CubeDirection.CLOCKWISE)
 		);
+	
+	public final static MoveSequence bottomLayerCornerOLL04Sequence = new MoveSequence(
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALTOP, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALTOP, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE)
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL05Sequence = new MoveSequence(
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE) // ergänzt damit Seite wieder unten ist
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL06Sequence = new MoveSequence(
+			new Move(CubeRotation.VERTICALBACK, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE) // ergänzt damit Seite wieder unten ist
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL07Sequence = new MoveSequence(
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE)
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL08Sequence = new MoveSequence(
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDLEFT, CubeDirection.CLOCKWISE)
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL09Sequence = new MoveSequence(
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE)
+		);
+	
+	public final static MoveSequence bottomLayerCornerOLL10Sequence = new MoveSequence(
+			new Move(CubeRotation.VERTICALBACK, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE),
+			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE),
+			new Move(CubeRotation.VERTICALBACK, CubeDirection.CLOCKWISE)
+		);
 }
