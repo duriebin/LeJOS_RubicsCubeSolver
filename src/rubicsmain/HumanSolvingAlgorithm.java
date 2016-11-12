@@ -2,15 +2,14 @@ package rubicsmain;
 
 import java.util.ArrayList;
 
+import common.Utilities;
 import rubicscube.Corner;
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
-import rubicscube.CubeLayer;
 import rubicscube.CubeRotation;
 import rubicscube.Edge;
 import rubicscube.Fragment;
 import rubicscube.Middle;
-import rubicscube.Move;
 import rubicscube.MoveSequence;
 
 public class HumanSolvingAlgorithm {
@@ -105,8 +104,132 @@ public class HumanSolvingAlgorithm {
 			MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerOLL10Sequence);
 		} 
 		
+		// Ecken vertauschen
+		// Dazu die Ecken reihum in ein Array speichern,
+		// damit später die notwendige Zugreihenfolge bestimmt werden kann.
+		ArrayList<Fragment> bottomCorners = new ArrayList<>();
+		bottomCorners.add(this.cube.getFragmentByPosition(18)); // links vorne unten
+		bottomCorners.add(this.cube.getFragmentByPosition(24)); // links hinten unten
+		bottomCorners.add(this.cube.getFragmentByPosition(26)); // rechts hinten unten
+		bottomCorners.add(this.cube.getFragmentByPosition(20)); // rechts vorne unten
+		
+		boolean cornerIsRight = false;
+		Fragment rightCorner = null;
+		
+		// Drehen der untersten Ebene bis eine Ecke richtig ist, oder alle vier richtig sind.
+		// Es muss dabei darauf geachtet werden, dass nicht nur zwei Ecken richtig sind,
+		// weil die Algorithmen diesen Fall nicht berücksichtigen.
+		for (int i = 0; i < 4; i++) {
+			int rightCornerCounter = 0;
+			for (int j = 0; j < bottomCorners.size(); j++) {
+				boolean tmpCcornerIsRight = fragmentIsRight(bottomCorners.get(j));
+				if (tmpCcornerIsRight) {
+					cornerIsRight = true;
+					rightCorner = bottomCorners.get(j);
+					rightCornerCounter++;
+				}
+			}
+			if (cornerIsRight && (rightCornerCounter == 1 || rightCornerCounter == 4)) {
+				break;
+			}
+			
+			// Weiter drehen
+			if (i != 3) {
+				resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE));
+			}
+		}
+		
+		// jetzt ist mindestens eine Ecke richtig
+		// Es gibt nun 3 Möglichkeiten.
+		// 1: Alle Ecken sind richtig
+		// 2: 3 falsche Ecken, welche im Uhrzeigersinn nach PLL02 vertauscht werden müssen
+		// 3: 3 falsche Ecken, welche gegen den Uhrzeigersinn nach PLL01 vertauscht werden müssen
+		
+		// Zunächst überprüfen, ob alle Ecken richtig sind
+		boolean cornersAreRight = true;
+		for (int i = 0; i < bottomCorners.size(); i++) {
+			if (!fragmentIsRight(bottomCorners.get(i))) {
+				cornersAreRight = false;
+				break;
+			}
+		}
+		
+		// Fall 2 und 3 überprüfen
+		if (!cornersAreRight) {
+			Fragment nextFragment = (Corner)Utilities.getNextArrayListItem(bottomCorners, rightCorner).clone();
+			Fragment secondeFragment = (Corner)Utilities.getNextArrayListItem(bottomCorners, nextFragment);
+			nextFragment.rotate(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE);
+			if (fragmentIsRight(nextFragment, secondeFragment.getPosition(this.cube))) {
+				
+				// Fall 2 liegt vor --> richtige Ecke hinten rechts plazieren und Algorithmus ausführen
+				while (rightCorner.getPosition(this.cube) != 26) {
+					resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+				}
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerPLL02Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerPLL02Sequence);
+			} else {
+				
+				// Fall 3 liegt vor --> richtige Ecke hinten links plazieren und Algorithmus ausführen
+				while (rightCorner.getPosition(this.cube) != 24) {
+					resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+				}
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerPLL01Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerPLL01Sequence);
+			}
+		}
+		
+		// Jetzt sind alle Ecken richtig und es müssen nur noch die 4 verbliebenen Kanten permutiert werden
+		
 		return resultSequence;
 	}
+	
+	/*
+	 * Überprüft ob ein Fragment richtig positioniert ist an einer bestimmten Position
+	 */
+	private boolean fragmentIsRight(Fragment f, int pos) {
+		boolean result = true;
+		int layer = Cube.getLayer(pos);
+		int row = Cube.getRow(pos);
+		int column = Cube.getColumn(pos);
+		if (layer == 0) {
+			if (f.getFaceTop().getColor() != this.getTopLayerColor()) {
+				result = false;
+			}
+		} else if (layer == 2) {
+			if (f.getFaceBottom().getColor() != this.getBottomLayerColor()) {
+				result = false;
+			}
+		}
+		if (row == 0) {
+			if (f.getFaceFront().getColor() != this.getFrontLayerColor()) {
+				result = false;
+			}
+		} else if (row == 2) {
+			if (f.getFaceBack().getColor() != this.getBackLayerColor()) {
+				result = false;
+			}
+		}
+		if (column == 0) {
+			if (f.getFaceLeft().getColor() != this.getLeftLayerColor()) {
+				result = false;
+			}
+		} else if (column == 2){
+			if (f.getFaceRight().getColor() != this.getRightLayerColor()) {
+				result = false;
+			}
+		}
+		
+		return result;
+	}
+	
+	/*
+	 * Überprüft ob ein Fragment richtig positioniert ist
+	 */
+	private boolean fragmentIsRight(Fragment f) {
+		int pos = f.getPosition(this.cube);
+		return this.fragmentIsRight(f, pos);
+	}
+	
 	
 	/*
 	 * Berücksichtigt bei den Patterns den RotationCounter

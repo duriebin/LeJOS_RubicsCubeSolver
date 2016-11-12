@@ -1,21 +1,13 @@
 package rubicsmain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import common.Utilitis;
 import rubicscube.Corner;
 import rubicscube.Cube;
-import rubicscube.CubeDirection;
-import rubicscube.CubeLayer;
-import rubicscube.CubePosition;
-import rubicscube.CubeRotation;
 import rubicscube.Edge;
 import rubicscube.FacePosition;
 import rubicscube.Fragment;
 import rubicscube.LayerNotAllowedException;
 import rubicscube.Middle;
-import rubicscube.Move;
 import rubicscube.MoveSequence;
 import rubicscube.PositionNotAllowedException;
 import rubicsrobot.OpticalArm;

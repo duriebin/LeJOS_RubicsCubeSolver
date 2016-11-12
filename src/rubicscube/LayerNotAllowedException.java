@@ -1,7 +1,5 @@
 package rubicscube;
 
-import javax.swing.text.LayeredHighlighter.LayerPainter;
-
 @SuppressWarnings("serial")
 public class LayerNotAllowedException extends Exception {
 	public LayerNotAllowedException() {}

@@ -3,7 +3,7 @@ package rubicscube;
 import java.util.Arrays;
 import java.util.Collections;
 
-import common.Utilitis;
+import common.Utilities;
 
 /*
  * Schema zum Rotieren/Vertauschen nach dem Model von Cube.getFragmentByPosition
@@ -24,7 +24,7 @@ public class CubeRotationSchema {
 	 * Kopiert das Schema und verschiebt alle Werte um den angegebenen Faktor(layer)
 	 */
 	private static int[][] getHorizontalSchemaByLayer(int layer) {
-		int[][] matrix = Utilitis.deepCopyIntMatrix(horizontalRotationSchema);
+		int[][] matrix = Utilities.deepCopyIntMatrix(horizontalRotationSchema);
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				matrix[i][j] += layer * 9; // um n-Schichten jeden Wert verschieben
@@ -37,7 +37,7 @@ public class CubeRotationSchema {
 	 * Kopiert das Schema und verschiebt alle Werte um den angegebenen Faktor(row)
 	 */
 	private static int[][] getVerticalSchemaByLayer(int row) {
-		int[][] matrix = Utilitis.deepCopyIntMatrix(verticalRotationSchema);
+		int[][] matrix = Utilities.deepCopyIntMatrix(verticalRotationSchema);
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				matrix[i][j] += row * 3; // um n-Zeilen jeden Wert verschieben
@@ -50,7 +50,7 @@ public class CubeRotationSchema {
 	 * Kopiert das Schema und verschiebt alle Werte um den angegebenen Faktor(layer)
 	 */
 	private static int[][] getForwardSchemaByLayer(int layer) {
-		int[][] matrix = Utilitis.deepCopyIntMatrix(forwardRotationSchema);
+		int[][] matrix = Utilities.deepCopyIntMatrix(forwardRotationSchema);
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				matrix[i][j] += layer; // um n-Schichten jeden Wert verschieben
@@ -73,7 +73,7 @@ public class CubeRotationSchema {
 				result = getHorizontalSchemaByLayer(1);
 				break;
 			case HORIZONTALTOP:
-				result = Utilitis.deepCopyIntMatrix(horizontalRotationSchema);
+				result = Utilities.deepCopyIntMatrix(horizontalRotationSchema);
 				break;
 			case VERTICALBACK:
 				result = getVerticalSchemaByLayer(2);
@@ -82,16 +82,16 @@ public class CubeRotationSchema {
 				result = getVerticalSchemaByLayer(1);
 				break;
 			case VERTICALFRONT: 
-				result = Utilitis.deepCopyIntMatrix(verticalRotationSchema);
+				result = Utilities.deepCopyIntMatrix(verticalRotationSchema);
 				break;
 			case HORIZONTALWHOLE:
-				result = Utilitis.concatAll(Utilitis.deepCopyIntMatrix(horizontalRotationSchema), getHorizontalSchemaByLayer(1), getHorizontalSchemaByLayer(2));
+				result = Utilities.concatAll(Utilities.deepCopyIntMatrix(horizontalRotationSchema), getHorizontalSchemaByLayer(1), getHorizontalSchemaByLayer(2));
 				break;
 			case VERTICALWHOLE:
-				result = Utilitis.concatAll(Utilitis.deepCopyIntMatrix(verticalRotationSchema), getVerticalSchemaByLayer(1), getVerticalSchemaByLayer(2));
+				result = Utilities.concatAll(Utilities.deepCopyIntMatrix(verticalRotationSchema), getVerticalSchemaByLayer(1), getVerticalSchemaByLayer(2));
 				break;
 			case FORWARDLEFT:
-				result = Utilitis.deepCopyIntMatrix(forwardRotationSchema);
+				result = Utilities.deepCopyIntMatrix(forwardRotationSchema);
 				break;
 			case FORWARDMIDDLE:
 				result = getForwardSchemaByLayer(1);
@@ -100,7 +100,7 @@ public class CubeRotationSchema {
 				result = getForwardSchemaByLayer(2);
 				break;
 			case FORWARDWHOLE:
-				result = Utilitis.concatAll(Utilitis.deepCopyIntMatrix(forwardRotationSchema), getForwardSchemaByLayer(1), getForwardSchemaByLayer(2));
+				result = Utilities.concatAll(Utilities.deepCopyIntMatrix(forwardRotationSchema), getForwardSchemaByLayer(1), getForwardSchemaByLayer(2));
 				break;
 			default:
 				break;

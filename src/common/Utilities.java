@@ -1,10 +1,22 @@
 package common;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Utilitis {
+public class Utilities {
+	
+	/*
+	 * Gibt das nächste Listenitem zurück.
+	 * Wenn man sich am Ende der Liste befindet, wird das erste Element zurückgegeben.
+	 */
+	public static <T> T getNextArrayListItem(ArrayList<T> list, T currentElement) {
+		int currentIndex = list.indexOf(currentElement);
+		int nextIndex = currentIndex + 1;
+		if (currentIndex == list.size() - 1) {
+			nextIndex = 0;
+		}
+		return list.get(nextIndex);
+	}
 	
 	/*
 	 * Methode zum Klonen von Float-Arrays
@@ -23,7 +35,7 @@ public class Utilitis {
 	public static ArrayList<float[]> copy(ArrayList<float[]> list) {
 		ArrayList<float[]> result = new ArrayList<>(list.size());
 		for (int i = 0; i < list.size(); i++) {
-			result.set(i, Utilitis.copy(list.get(i)));
+			result.set(i, Utilities.copy(list.get(i)));
 		}
 		return result;
 	}

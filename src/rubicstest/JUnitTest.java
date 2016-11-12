@@ -10,7 +10,6 @@ import org.unitils.reflectionassert.ReflectionAssert;
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
 import rubicscube.CubeRotation;
-import rubicsmain.ColorSorter;
 import rubicsmain.HumanSolvingAlgorithm;
 import rubicsmain.Logic;
 

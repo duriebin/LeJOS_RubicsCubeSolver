@@ -286,7 +286,7 @@ public abstract class Fragment implements Cloneable {
 	}
 	
 	@Override
-	protected Object clone() {
+	public Object clone() {
 		Fragment f;
 		if (this instanceof Middle) {
 			f = new Middle(

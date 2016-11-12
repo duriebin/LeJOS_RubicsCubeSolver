@@ -2,7 +2,7 @@ package rubicsrobot;
 
 import java.util.AbstractMap.SimpleEntry;
 
-import common.Utilitis;
+import common.Utilities;
 
 import java.util.ArrayList;
 
@@ -86,7 +86,7 @@ public class ColorManager {
 
 						// Alle 3 Werte müssen im Toleranzbereich liegen und
 						if (matchCounter >= colorGroupValue.length) {
-							float difference = Utilitis.calcDifference(rgb, colorGroupValue);
+							float difference = Utilities.calcDifference(rgb, colorGroupValue);
 							
 							// Gruppe muss ähnlicher sein als die bereits gefundene Gruppe, falls dies der Fall ist.
 							if (difference < bestMatchDifference) {
@@ -107,12 +107,12 @@ public class ColorManager {
 			// zugeordnete RGB-Werte zur Auflistung ergänzen
 			// Kopie dazu erstellen, damit keine Probleme auftreten, 
 			// falls die rgb-Referenz geändert wird
-			getColorGroupValuesById(bestMatchId).add(Utilitis.copy(rgb));
+			getColorGroupValuesById(bestMatchId).add(Utilities.copy(rgb));
 		} else {
 			
 			// wenn keine Zuordnung möglich war, dann neue Gruppe anlegen
 			ArrayList<float[]> l = new ArrayList<>();
-			l.add(Utilitis.copy(rgb));
+			l.add(Utilities.copy(rgb));
 			bestMatchId = this.colorList.size() + 1;
 			this.colorList.add(new SimpleEntry<Integer, ArrayList<float[]>>(bestMatchId, l));
 		}

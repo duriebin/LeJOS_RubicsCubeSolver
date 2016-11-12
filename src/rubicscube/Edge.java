@@ -1,7 +1,5 @@
 package rubicscube;
 
-import lejos.robotics.Color;
-
 public class Edge extends Fragment {
 	
 	public Edge() {

@@ -1,12 +1,8 @@
 package rubicsmain;
 
-import java.util.ArrayList;
-
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
-import rubicscube.CubeLayer;
 import rubicscube.CubeRotation;
-import rubicscube.Fragment;
 
 /*
  * Repräsentiert eine Anordnung von Faces auf einen 5*5 Feld,
