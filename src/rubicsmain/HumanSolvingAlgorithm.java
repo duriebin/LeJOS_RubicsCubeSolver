@@ -113,29 +113,42 @@ public class HumanSolvingAlgorithm {
 		bottomCorners.add(this.cube.getFragmentByPosition(26)); // rechts hinten unten
 		bottomCorners.add(this.cube.getFragmentByPosition(20)); // rechts vorne unten
 		
-		boolean cornerIsRight = false;
 		Fragment rightCorner = null;
-		
+
 		// Drehen der untersten Ebene bis eine Ecke richtig ist, oder alle vier richtig sind.
 		// Es muss dabei darauf geachtet werden, dass nicht nur zwei Ecken richtig sind,
 		// weil die Algorithmen diesen Fall nicht berücksichtigen.
 		for (int i = 0; i < 4; i++) {
 			int rightCornerCounter = 0;
 			for (int j = 0; j < bottomCorners.size(); j++) {
-				boolean tmpCcornerIsRight = fragmentIsRight(bottomCorners.get(j));
-				if (tmpCcornerIsRight) {
-					cornerIsRight = true;
+				boolean tmpCornerIsRight = fragmentIsRight(bottomCorners.get(j));
+				if (tmpCornerIsRight) {
 					rightCorner = bottomCorners.get(j);
 					rightCornerCounter++;
 				}
 			}
-			if (cornerIsRight && (rightCornerCounter == 1 || rightCornerCounter == 4)) {
+			if (rightCornerCounter == 1 || rightCornerCounter == 4) {
 				break;
 			}
 			
 			// Weiter drehen
 			if (i != 3) {
 				resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE));
+			} else if (rightCornerCounter == 2 || rightCornerCounter == 0) {
+				
+				// Wenn alles vergeblich versucht wurde damit einer oder alle richtig sind,
+				// werden hier die unteren Ecken beliebig vertauscht und das Prozedere erneut versucht.
+				i = -1;
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerPLL02Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerPLL02Sequence);
+				
+				// Wenn das gemacht wird, müssen die Ecken neu eingelesen werden, 
+				// weil die Eckenreihenfolge verändert wird.
+				bottomCorners = new ArrayList<>();
+				bottomCorners.add(this.cube.getFragmentByPosition(18)); // links vorne unten
+				bottomCorners.add(this.cube.getFragmentByPosition(24)); // links hinten unten
+				bottomCorners.add(this.cube.getFragmentByPosition(26)); // rechts hinten unten
+				bottomCorners.add(this.cube.getFragmentByPosition(20)); // rechts vorne unten
 			}
 		}
 		
@@ -153,14 +166,14 @@ public class HumanSolvingAlgorithm {
 				break;
 			}
 		}
-		
+
 		// Fall 2 und 3 überprüfen
 		if (!cornersAreRight) {
 			Fragment nextFragment = (Corner)Utilities.getNextArrayListItem(bottomCorners, rightCorner).clone();
 			Fragment secondeFragment = (Corner)Utilities.getNextArrayListItem(bottomCorners, nextFragment);
 			nextFragment.rotate(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE);
 			if (fragmentIsRight(nextFragment, secondeFragment.getPosition(this.cube))) {
-				
+
 				// Fall 2 liegt vor --> richtige Ecke hinten rechts plazieren und Algorithmus ausführen
 				while (rightCorner.getPosition(this.cube) != 26) {
 					resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
@@ -168,7 +181,7 @@ public class HumanSolvingAlgorithm {
 				resultSequence.getMoves().addAll(RotationSequence.bottomLayerCornerPLL02Sequence.getMoves());
 				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerCornerPLL02Sequence);
 			} else {
-				
+
 				// Fall 3 liegt vor --> richtige Ecke hinten links plazieren und Algorithmus ausführen
 				while (rightCorner.getPosition(this.cube) != 24) {
 					resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
@@ -179,7 +192,70 @@ public class HumanSolvingAlgorithm {
 		}
 		
 		// Jetzt sind alle Ecken richtig und es müssen nur noch die 4 verbliebenen Kanten permutiert werden
+		ArrayList<Fragment> bottomEdges = new ArrayList<>();
+		bottomEdges.add(this.cube.getFragmentByPosition(19)); // unten vorne mitte
+		bottomEdges.add(this.cube.getFragmentByPosition(21)); // unten links mitte
+		bottomEdges.add(this.cube.getFragmentByPosition(25)); // unten hinten mitte
+		bottomEdges.add(this.cube.getFragmentByPosition(23)); // unten rechts mitte
 		
+		// Feststellen wie viele Kanten richtig positioniert sind,
+		// damit dann über weitere Schritte entschieden werden kann.
+		// Sind 0 richtig, müssen OLL04 oder OLL05 angewendet werden.
+		// Ist 1 richtig, müssen OLL06 oder OLL07 angewendet werden.
+		// Sind 4 richtig, ist der Würfel gelöst.
+		int rightEdgesCounter = 0;
+		Fragment rightEdge = null;
+		for (int i = 0; i < bottomEdges.size(); i++) {
+			boolean tmpCcornerIsRight = fragmentIsRight(bottomEdges.get(i));
+			if (tmpCcornerIsRight) {
+				rightEdge = bottomEdges.get(i);
+				rightEdgesCounter++;
+			}
+		}
+
+		if (rightEdgesCounter == 1) {
+
+			// Fall: Eine Kante richtig
+			// Richtige Kante unten vorne mitte plazieren damit Algorithmus ausgewendet werden kann.
+			while (rightEdge.getPosition(this.cube) != 19) {
+				resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+			}
+			
+			// Ermitteln in welche Richtung vertauscht werden muss
+			Fragment nextFragment = (Edge)Utilities.getNextArrayListItem(bottomEdges, rightEdge).clone();
+			Fragment secondeFragment = (Edge)Utilities.getNextArrayListItem(bottomEdges, nextFragment);
+			nextFragment.rotate(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE);
+			if (fragmentIsRight(nextFragment, secondeFragment.getPosition(this.cube))) {
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerEdgePLL06Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerEdgePLL06Sequence);
+			} else {
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerEdgePLL07Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerEdgePLL07Sequence);
+			} 
+		} else if (rightEdgesCounter == 0) {
+			
+			// Fall: Keine Kanten richtig
+			// Überprüfen ob irgendeine Kante an der Position um +-90° gedreht richtig wäre,
+			// um zu ermitteln, ob nur über Ecke getauscht werden muss oder komplett über die Mitte.
+			Fragment currentFragment = (Edge)bottomEdges.get(1).clone();
+			Fragment currentFragment2 = (Edge)currentFragment.clone();
+			Fragment nextFragment = (Edge)bottomEdges.get(2);
+			Fragment previousFragment = (Edge)bottomEdges.get(0);
+			currentFragment.rotate(CubeRotation.HORIZONTALBOTTOM, CubeDirection.CLOCKWISE);
+			currentFragment2.rotate(CubeRotation.HORIZONTALBOTTOM, CubeDirection.COUNTERCLOCKWISE);
+			if (fragmentIsRight(currentFragment, nextFragment.getPosition(this.cube))) {
+				resultSequence.getMoves().add(this.cube.rotateCube(CubeRotation.HORIZONTALWHOLE, CubeDirection.CLOCKWISE));
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerEdgePLL04Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerEdgePLL04Sequence);
+			} else if (fragmentIsRight(currentFragment2, previousFragment.getPosition(this.cube))) {
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerEdgePLL04Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerEdgePLL04Sequence);
+			} else {
+				resultSequence.getMoves().addAll(RotationSequence.bottomLayerEdgePLL05Sequence.getMoves());
+				MoveHandler.doMoveSequence(this.cube, RotationSequence.bottomLayerEdgePLL05Sequence);
+			}
+		}
+
 		return resultSequence;
 	}
 	

@@ -10,8 +10,10 @@ import org.unitils.reflectionassert.ReflectionAssert;
 import rubicscube.Cube;
 import rubicscube.CubeDirection;
 import rubicscube.CubeRotation;
+import rubicscube.MoveSequence;
 import rubicsmain.HumanSolvingAlgorithm;
 import rubicsmain.Logic;
+import rubicsmain.MoveHandler;
 
 public class JUnitTest {
 	
@@ -25,12 +27,15 @@ public class JUnitTest {
 	@Test
 	public void startRandomSolvingTest() {
 		Cube cube = FakeData.getFakeCube();
-		for (int i = 0; i < 100; i++) {
-			cube.performRandomMove();
+		for (int j = 0; j < 1000; j++) {
+			for (int i = 0; i < 100; i++) {
+				cube.performRandomMove();
+			}
+			HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+			MoveSequence solveSequence = alg.solveCube();
+			MoveHandler.doMoveSequence(cube, solveSequence);
+			assertEquals(true, cube.isSolved());
 		}
-		HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
-		alg.solveCube();
-		assertEquals(true, cube.isSolved());
 	}
 	
 	@Test

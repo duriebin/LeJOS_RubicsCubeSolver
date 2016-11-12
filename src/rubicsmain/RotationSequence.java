@@ -268,6 +268,9 @@ public class RotationSequence {
 			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE) // ergänzt damit Seite wieder unten ist
 		);
 	
+	/*
+	 * Wird in der aktuellen Umsetzung nicht benötigt
+	 */
 	public final static MoveSequence bottomLayerCornerPLL03Sequence = new MoveSequence(
 			new Move(CubeRotation.FORWARDWHOLE, CubeDirection.CLOCKWISE),
 			new Move(CubeRotation.FORWARDRIGHT, CubeDirection.COUNTERCLOCKWISE),
