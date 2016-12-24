@@ -34,8 +34,8 @@ public class RotationPlatform {
 	 * damit der Würfel vollständig gedreht wird
 	 */
 	public void rotateClockwiseForCubeRotation() {
-		this.platformMotor.rotate(105 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
-		this.platformMotor.rotate(-15 * 3); // 15° zurückdrehen
+		this.platformMotor.rotate(108 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
+		this.platformMotor.rotate(-18 * 3); // 15° zurückdrehen
 	}
 	
 	/*
@@ -43,8 +43,8 @@ public class RotationPlatform {
 	 * damit der Würfel vollständig gedreht wird
 	 */
 	public void rotateCounterclockwiseForCubeRotation() {
-		this.platformMotor.rotate(-105 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
-		this.platformMotor.rotate(15 * 3); // 15° zurückdrehen
+		this.platformMotor.rotate(-108 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
+		this.platformMotor.rotate(18 * 3); // 15° zurückdrehen
 	}
 	
 	/*

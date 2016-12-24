@@ -12,34 +12,30 @@ public class OpticalArm {
 	private EV3ColorSensor colorSensor;
 	private SampleProvider sampleProvider;
 	private int sampleSize;
+	private Robot robot;
 	
 	/*
 	 * Initialisiert den optischen Arm
 	 */
-	public OpticalArm(Port engingePort, Port sensorPort) {
+	public OpticalArm(Port engingePort, Port sensorPort, Robot robot) {
 		this.opticalMotor = new EV3MediumRegulatedMotor(engingePort);
 		this.opticalMotor.setSpeed(360); // in Grad pro Sekunde
 		this.colorSensor = new EV3ColorSensor(sensorPort);
 		this.sampleProvider = this.colorSensor.getRGBMode();
 		this.sampleSize = this.sampleProvider.sampleSize();
+		this.robot = robot;
 	}
 	
 	public float[] scanMiddleBlock() {
-		searchStart();
-		this.opticalMotor.rotate(-24 * 3);
-		return scanBlock(2, 20);
+		return scanBlock(2, 20, 3, 30);
 	}
 	
 	public float[] scanCornerBlock() {
-		searchStart();
-		this.opticalMotor.rotate(-2 * 3);
-		return scanBlock(1, 18);
+		return scanBlock(2, 10, 3, 4);
 	}
 	
 	public float[] scanEdgeBlock() {
-		searchStart();
-		this.opticalMotor.rotate(-2 * 3);
-		return scanBlock(2, 15);
+		return scanBlock(2, 15, 5, 6);
 	}
 	
 	/*
@@ -72,49 +68,61 @@ public class OpticalArm {
 	
 	/*
 	 * Scannt einen Block ab der aktuellen Position des Arms.
-	 * Es wird dabei immer um 3° vorgerückt und 10 gleiche Farben in Folge gesucht.
+	 * Es wird dabei immer um degreesToMove vorgerückt und countOfSuccess gleiche Farben in Folge gesucht.
 	 * Ergebnis is eine für diese Farbe einheitliche Id.
+	 * countOfMoves gibt an, wie oft maximal vorgerückt wird.
+	 * startRotationDegrees: Anzahl der Grad, wie viel bereits am Anfang nach vorne gegangen werden soll, 
+	 * nachdem die Startposition eingenommen wurde.
 	 */
-	private float[] scanBlock(int degreesToMove, int countOfMoves) {
+	private float[] scanBlock(int degreesToMove, int countOfMoves, int countOfSuccess, int startRotationDegrees) {
 		
 		// ColorManager-Instanze zur Überprüfung, ob 10 mal die gleiche Farbe gefunden wurde
-		ColorManager colorManager = new ColorManager();
-		int successCounter = 0;
-		int previousColor = -1;
+		ColorManager colorManager;
+		int successCounter;
+		int previousColor;
 		boolean success = false;
 		float[] rgb = new float[this.sampleSize];
-		
-		// countOfMoves mal wird degreesToMove Grad vorgerückt
-		for (int i = 0; i < countOfMoves; i++) {
-			this.sampleProvider.fetchSample(rgb, 0); // Block wird gescannt
-
-			int color = colorManager.parseRGB(rgb);
-			if (previousColor == color) {
-				++successCounter;
-			} else {
-				successCounter = 0;
+		do {
+			searchStart(); // Ausrichten der Kamera am Anfang des Würfels
+			this.opticalMotor.rotate(-startRotationDegrees * 3); // Startposition zum Lesen einnehmen
+			
+			successCounter = 0;
+			previousColor = -1;
+			colorManager = new ColorManager();
+			
+			// countOfMoves mal wird degreesToMove Grad vorgerückt
+			for (int i = 0; i < countOfMoves; i++) {
+				this.sampleProvider.fetchSample(rgb, 0); // Block wird gescannt
+	
+				int color = colorManager.parseRGB(rgb);
+				if (previousColor == color) {
+					++successCounter;
+				} else {
+					successCounter = 0;
+				}
+				previousColor = color;
+				if (successCounter == countOfSuccess) {
+					success = true;
+					break;
+				}
+				this.opticalMotor.rotate(-degreesToMove * 3);
 			}
-			previousColor = color;
-			if (successCounter == 5) {
-				success = true;
-				break;
+			
+			// Bei einem Fehler wird der Block nochmals gescanned
+			if (!success) {
+				LCD.drawString("Fehler beim Einlesen der Farbe.", 0, 0);
+				LCD.drawString("Farbe konnte nicht richtig gelesen werden.", 0, 2);
+				
+				// Hin und her drehen der Platform, damit Fläche anders liegt
+				this.robot.rotatePlatformClockwise();
+				this.robot.rotatePlatformCounterclockwise();
 			}
-			this.opticalMotor.rotate(-degreesToMove * 3);
-		}
+		} while(!success);
 		
-		// TODO: Fehlerhandling
-		// Eine Idee wäre, dass der Block nochmals gescannt wird, 
-		// oder dass der Cube 4 mal gedreht wird, damit die Ebene erneut eingescannt werden kann
-		if (!success) {
-			LCD.drawString("Fehler beim Einlesen der Farbe.", 0, 0);
-			LCD.drawString("Farbe konnte nicht richtig gelesen werden.", 0, 0);
-		}
 		
-		// Durchschnittswert berechnen aus den gesamelten Farbenwerten
+		// Durchschnittswert berechnen aus den gesammelten Farbenwerten
 		rgb = colorManager.calculateAverage(previousColor);
 		return rgb;
-		//int result = ColorManager.getInstance().parseRGB(rgb); // TODO: result-Variable entferen (zu Debugzwecken erstellt)
-		//return result;
 	}
 	
 	public void debugScan() {

@@ -23,7 +23,7 @@ public class Robot {
 	public Robot() {
 		this.rotationPlatform = new RotationPlatform(MotorPort.B);
 		this.grappler = new Grappler(MotorPort.A);
-		this.opticalArm = new OpticalArm(MotorPort.C, SensorPort.S1);
+		this.opticalArm = new OpticalArm(MotorPort.C, SensorPort.S1, this);
 	}
 	
 	/*
@@ -53,6 +53,7 @@ public class Robot {
 	public void rotateCubeClockwise() {
 		this.grappler.holdCube();
 		this.rotationPlatform.rotateClockwiseForCubeRotation();
+		this.grappler.releaseCube();
 	}
 	
 	/*
@@ -61,6 +62,7 @@ public class Robot {
 	public void rotateCubeCounterclockwise() {
 		this.grappler.holdCube();
 		this.rotationPlatform.rotateCounterclockwiseForCubeRotation();
+		this.grappler.releaseCube();
 	}
 	
 	/*

@@ -21,9 +21,39 @@ public class Logic {
 	}
 	
 	/*
+	 * Löst sowohl den virtuellen Cube als auch den Realen
+	 */
+	public void solveCube() {
+		
+		boolean cubeSuccessfullyScanned;
+		Cube c = null;
+		MoveSequence moves = null;
+		do {
+			cubeSuccessfullyScanned = true;
+			try {
+				c = this.scanCube();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				cubeSuccessfullyScanned = false;
+				continue;
+			}
+			Solveable algorithm = new HumanSolvingAlgorithm(c);
+			try {
+				moves = algorithm.solveCube();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				
+				// Würfel wurde nicht richtig eingescannt und konnte deshalb nicht gelöst werden.
+				cubeSuccessfullyScanned = false;
+			}
+		} while(!cubeSuccessfullyScanned);
+		MoveHandler.doMoveSequence(this.robot, moves);
+	}
+	
+	/*
 	 * Scannt den gesamten Würfel und erzeugt ihn virtuell
 	 */
-	public Cube scanCube() throws PositionNotAllowedException, LayerNotAllowedException {
+	private Cube scanCube() throws PositionNotAllowedException, LayerNotAllowedException {
 		ArrayList<float[]> scannedColors = new ArrayList<>();
 		
 		// Obige Seite einscannen

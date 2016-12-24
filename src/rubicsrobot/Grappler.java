@@ -20,8 +20,8 @@ public class Grappler {
 	 */
 	public void flipCube() {
 		holdCube();
-		this.grapplerMotor.rotate(100);
-		this.grapplerMotor.rotate(-100);
+		this.grapplerMotor.rotate(105);
+		this.grapplerMotor.rotate(-105);
 		releaseCube();
 	}
 	

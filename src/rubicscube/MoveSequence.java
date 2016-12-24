@@ -28,6 +28,4 @@ public class MoveSequence implements Iterable<Move> {
 	public Iterator<Move> iterator() {
 		return this.moves.iterator();
 	}
-	
-	
 }

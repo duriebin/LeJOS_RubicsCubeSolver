@@ -14,6 +14,7 @@ import rubicscube.MoveSequence;
 import rubicsmain.HumanSolvingAlgorithm;
 import rubicsmain.Logic;
 import rubicsmain.MoveHandler;
+import rubicsmain.RotationTranslationHandler;
 
 public class JUnitTest {
 	
@@ -34,6 +35,21 @@ public class JUnitTest {
 			HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
 			MoveSequence solveSequence = alg.solveCube();
 			MoveHandler.doMoveSequence(cube, solveSequence);
+			assertEquals(true, cube.isSolved());
+		}
+	}
+	
+	@Test
+	public void startMechanicalTranslationTest() {
+		Cube cube = FakeData.getFakeCube();
+		for (int j = 0; j < 1000; j++) {
+			for (int i = 0; i < 100; i++) {
+				cube.performRandomMove();
+			}
+			HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+			MoveSequence solveSequence = alg.solveCube();
+			MoveSequence translatedSequence = RotationTranslationHandler.translateToRobotRotations(solveSequence);
+			MoveHandler.doMoveSequence(cube, translatedSequence);
 			assertEquals(true, cube.isSolved());
 		}
 	}

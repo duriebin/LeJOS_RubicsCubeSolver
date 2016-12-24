@@ -12,7 +12,7 @@ import rubicscube.Fragment;
 import rubicscube.Middle;
 import rubicscube.MoveSequence;
 
-public class HumanSolvingAlgorithm {
+public class HumanSolvingAlgorithm implements Solveable {
 	private Cube cube;
 	private ArrayList<Fragment> corners;
 	private ArrayList<Fragment> middles;
