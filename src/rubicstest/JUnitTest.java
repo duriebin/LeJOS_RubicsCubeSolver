@@ -26,6 +26,11 @@ public class JUnitTest {
 	}
 	
 	@Test
+	public void startOptimizationTest() {
+		
+	}
+	
+	@Test
 	public void startRandomSolvingTest() {
 		Cube cube = FakeData.getFakeCube();
 		for (int j = 0; j < 1000; j++) {

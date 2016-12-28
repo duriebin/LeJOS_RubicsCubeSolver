@@ -8,6 +8,7 @@ import rubicscube.FacePosition;
 import rubicscube.Fragment;
 import rubicscube.LayerNotAllowedException;
 import rubicscube.Middle;
+import rubicscube.Move;
 import rubicscube.MoveSequence;
 import rubicscube.PositionNotAllowedException;
 import rubicsrobot.OpticalArm;
@@ -47,7 +48,9 @@ public class Logic {
 				cubeSuccessfullyScanned = false;
 			}
 		} while(!cubeSuccessfullyScanned);
-		MoveHandler.doMoveSequence(this.robot, moves);
+		MoveSequence translatedSequence = RotationTranslationHandler.translateToRobotRotations(moves);
+		opitimizeMoveSequence(translatedSequence);
+		MoveHandler.doMoveSequence(this.robot, translatedSequence);
 	}
 	
 	/*
@@ -166,6 +169,49 @@ public class Logic {
 		}
 		
 		return cube;
+	}
+	
+	/*
+	 * Optimiert bereits auf Roboter übersetzte MoveSequence.
+	 * Sinnlose Züge werden entfernt
+	 */
+	public void opitimizeMoveSequence(MoveSequence moveSequence) {
+		ArrayList<Move> moves = moveSequence.getMoves();
+		for (int i = moves.size() - 1; i >= 1; i--) {
+			Move currentMove = moves.get(i);
+			Move previousMove = moves.get(i - 1);
+			
+			// Gleiche Rotation, welche entgegengesetzt sind, sind überflüssig
+			// und werden gelöscht
+			if (currentMove.getRotation() == previousMove.getRotation() &&
+					currentMove.getDirection() != previousMove.getDirection()) {
+				moves.remove(i);
+				moves.remove(i - 1);
+				i--;
+				break;
+			}
+			
+			if (i >= 3) {
+				Move ppreviousMove = moves.get(i - 2);
+				Move pppreviousMove = moves.get(i - 3);
+				
+				// Vier gleiche Rotationen hintereinander sind überflüssig
+				// und werden gelöscht
+				if (currentMove.getRotation() == previousMove.getRotation() &&
+					currentMove.getDirection() == previousMove.getDirection() &&
+					ppreviousMove.getRotation() == previousMove.getRotation() &&
+					ppreviousMove.getDirection() == previousMove.getDirection() &&
+					ppreviousMove.getRotation() == pppreviousMove.getRotation() &&
+					ppreviousMove.getDirection() == pppreviousMove.getDirection()) {
+					moves.remove(i);
+					moves.remove(i - 1);
+					moves.remove(i - 2);
+					moves.remove(i - 3);
+					i = i - 3;
+					break;
+				}
+			}
+		}
 	}
 	
 	/*
