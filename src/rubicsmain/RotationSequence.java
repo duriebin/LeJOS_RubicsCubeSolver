@@ -11,8 +11,8 @@ import rubicscube.MoveSequence;
 public class RotationSequence {
 	
 	/*
-	 * Abfolge von Zugsequenzen für das Scannen des Würfels
-	 * Die erste Seite muss bereits zuvor eingescanned werden
+	 * Abfolge von Zugsequenzen für das Scannen des Würfels.
+	 * Die erste Seite muss bereits zuvor eingescannet werden.
 	 */
 	public final static ArrayList<MoveSequence> scanSequence = new ArrayList<>(
 			Arrays.asList(new MoveSequence[] { 

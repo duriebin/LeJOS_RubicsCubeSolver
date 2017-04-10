@@ -26,10 +26,12 @@ public class Pattern {
 	}
 	
 	/*
-	 * Untersucht ob das Pattern auf die untere Schicht des Würfels zutrifft.
-	 * Es werden auch Rotationen berücksichtigt 
-	 * --> rotationCounter gibt die Anzahl der in Uhrzeigersinn horizontal notwendigen Rotation zurück
-	 * Da Java pass-by-value und nicht pass-by-reference ist, muss hier auf ein Array zurückgegriffen werden.
+	 * Die Methode match untersucht, ob das Pattern auf die untere Schicht des 
+	 * Würfels zutrifft. Es werden auch Rotationen berücksichtigt.
+	 * Parameter rotationCounter: Gibt die Anzahl der in Uhrzeigersinn 
+	 * horizontal notwendigen Rotation zurück.
+	 * Da Java pass-by-value und nicht pass-by-reference ist, 
+	 * muss hier auf ein Array zurückgegriffen werden.
 	 * 
 	 * Achtung: Aktuell nur so umgesetzt, dass es für untere Schicht funktioniert, 
 	 * da für dieses Projekt nicht mehr erforderlich ist.

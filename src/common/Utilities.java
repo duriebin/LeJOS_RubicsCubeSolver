@@ -85,17 +85,6 @@ public class Utilities {
 			for (int i = 0; i < first.length; i++) {
 				result += Math.abs(first[i] - seconde[i]);  
 			}
-//			float[] hsbf = Color.RGBtoHSB((int)(first[0] * calibrationConstance), (int)(first[1] * calibrationConstance), (int)(first[2] * calibrationConstance), null);
-//			float[] hsbs = Color.RGBtoHSB((int)(seconde[0] * calibrationConstance), (int)(seconde[1] * calibrationConstance), (int)(seconde[2] * calibrationConstance), null);
-//			return hsbf[0] - hsbs[0];
-//			result = 0;
-//			for (int i = 0; i < first.length; i++) {
-//				result += Math.pow(Math.abs(first[i] - seconde[i]) * 100, 10);
-//			}
-//			result = (float)Math.sqrt(result);
-//			for (int i = 0; i < first.length; i++) {
-//				result += Math.pow(Math.abs(first[i] - seconde[i]) * 100, 2); // hoch 2 damit sich große Abweichungen in einem Farbbereicht stärker auswirken
-//			}
 		}
 		
 		return result;

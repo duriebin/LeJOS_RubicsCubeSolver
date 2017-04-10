@@ -22,12 +22,49 @@ public class JUnitTest {
 	public void startSolvingTest() {
 		Cube cube = FakeData.getFakeCube();
 		HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
-		alg.solveCube();
+		MoveSequence moves = alg.solveCube();
+		MoveHandler.doMoveSequence(cube, moves);
+		assertEquals(true, cube.isSolved());
 	}
 	
 	@Test
 	public void startOptimizationTest() {
+		Cube cube = FakeData.getFakeCube();
+		HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+		MoveSequence moves = alg.solveCube();
+		System.out.println(moves.getMoves().size());
+		Logic l = new Logic(null);
+		l.opitimizeMoveSequence(moves, false);
+		System.out.println(moves.getMoves().size());
+		MoveSequence translatedSequence = RotationTranslationHandler.translateToRobotRotations(moves);
+		System.out.println(translatedSequence.getMoves().size());
+		l.opitimizeMoveSequence(translatedSequence, true);
+		System.out.println(translatedSequence.getMoves().size());
+		MoveHandler.doMoveSequence(cube, translatedSequence);
+		assertEquals(true, cube.isSolved());
+	}
+	
+	@Test
+	public void startOptimizationBatchTest() {
+		Cube cube = FakeData.getFakeCube();
 		
+		for (int j = 0; j < 1000; j++) {
+			for (int i = 0; i < 100; i++) {
+				cube.performRandomMove();
+			}
+			HumanSolvingAlgorithm alg = new HumanSolvingAlgorithm(cube);
+			MoveSequence moves = alg.solveCube();
+			System.out.println(moves.getMoves().size());
+			Logic l = new Logic(null);
+			l.opitimizeMoveSequence(moves, false);
+			System.out.println(moves.getMoves().size());
+			MoveSequence translatedSequence = RotationTranslationHandler.translateToRobotRotations(moves);
+			System.out.println(translatedSequence.getMoves().size());
+			l.opitimizeMoveSequence(translatedSequence, true);
+			System.out.println(translatedSequence.getMoves().size());
+			MoveHandler.doMoveSequence(cube, translatedSequence);
+			assertEquals(true, cube.isSolved());
+		}
 	}
 	
 	@Test
@@ -85,7 +122,7 @@ public class JUnitTest {
 	@Test
 	public void startRotationTest() {
 		Cube cube = FakeData.getFakeCube();
-//		cube.displayInConsole();
+
 		cube.rotateCube(CubeRotation.HORIZONTALTOP, CubeDirection.CLOCKWISE);		
 		cube.rotateCube(CubeRotation.HORIZONTALTOP, CubeDirection.COUNTERCLOCKWISE);
 		ReflectionAssert.assertReflectionEquals(FakeData.getFakeCube(), cube);

@@ -12,7 +12,7 @@ public class Grappler {
 	 */
 	public Grappler(Port port) {
 		this.grapplerMotor = new EV3LargeRegulatedMotor(port);
-		this.grapplerMotor.setSpeed(360); // in Grad pro Sekunde
+		this.grapplerMotor.setSpeed(400); // in Grad pro Sekunde
 	}
 	
 	/*
@@ -22,14 +22,17 @@ public class Grappler {
 		holdCube();
 		this.grapplerMotor.rotate(105);
 		this.grapplerMotor.rotate(-105);
-		releaseCube();
+		//releaseCube();
 	}
 	
 	/*
 	 * Hält den Cube
 	 */
 	public void holdCube() {
-		this.grapplerMotor.rotateTo(90);
+		int tacho = this.grapplerMotor.getTachoCount();
+		if (tacho < 80 || tacho > 100) {
+			this.grapplerMotor.rotateTo(90);
+		}
 	}
 	
 	/*

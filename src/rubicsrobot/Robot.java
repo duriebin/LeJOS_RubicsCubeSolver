@@ -23,7 +23,7 @@ public class Robot {
 	public Robot() {
 		this.rotationPlatform = new RotationPlatform(MotorPort.B);
 		this.grappler = new Grappler(MotorPort.A);
-		this.opticalArm = new OpticalArm(MotorPort.C, SensorPort.S1, this);
+		this.opticalArm = new OpticalArm(MotorPort.C, SensorPort.S1, this, this.grappler);
 	}
 	
 	/*
@@ -37,6 +37,7 @@ public class Robot {
 	 * Dreht die Platform um 90° im Uhrzeigersinn
 	 */
 	public void rotatePlatformClockwise() {
+		this.grappler.releaseCube();
 		this.rotationPlatform.rotatePlatformClockwise();
 	}
 	
@@ -44,6 +45,7 @@ public class Robot {
 	 * Dreht die Platform um 90° gegen den Uhrzeigersinn
 	 */
 	public void rotatePlatformCounterclockwise() {
+		this.grappler.releaseCube();
 		this.rotationPlatform.rotatePlatformCounterclockwise();
 	}
 	
@@ -53,7 +55,7 @@ public class Robot {
 	public void rotateCubeClockwise() {
 		this.grappler.holdCube();
 		this.rotationPlatform.rotateClockwiseForCubeRotation();
-		this.grappler.releaseCube();
+		//this.grappler.releaseCube();
 	}
 	
 	/*
@@ -62,7 +64,7 @@ public class Robot {
 	public void rotateCubeCounterclockwise() {
 		this.grappler.holdCube();
 		this.rotationPlatform.rotateCounterclockwiseForCubeRotation();
-		this.grappler.releaseCube();
+		//this.grappler.releaseCube();
 	}
 	
 	/*
@@ -76,9 +78,12 @@ public class Robot {
 	/*
 	 * Zeigt die übergebenen Infos für die übergebene Wartezeit in ms an
 	 */
-	public void displayInformation(String info, int sleep) {
+	public void displayInformation(String info) {
 		LCD.drawString(info, 0, 4);
-		sleep(sleep);
+	}
+	
+	public void clearDisplay() {
+		LCD.clear();
 	}
 	
 	/*
@@ -89,11 +94,25 @@ public class Robot {
 	}
 	
 	/*
+	 * Zum Kalibrieren der Plattform
+	 */
+	public void rotateOneDegreeClockwise() {
+		this.rotationPlatform.rotateOneDegreeClockwise();
+	}
+	
+	/*
+	 * Zum Kalibrieren der Plattform
+	 */
+	public void rotateOneDegreeCounterclockwise() {
+		this.rotationPlatform.rotateOneDegreeCounterclockwise();
+	}
+	
+	/*
 	 * Dreht alle Motoren auf ihren Anfangswert (0°) zurück
 	 */
 	public void turnAllToDefault() {
 		this.grappler.defaultPosition();
 		this.opticalArm.defaultPosition();
-		this.rotationPlatform.defaultPosition();
+		//this.rotationPlatform.defaultPosition();
 	}
 }

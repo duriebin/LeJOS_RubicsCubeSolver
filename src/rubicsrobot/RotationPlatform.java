@@ -12,7 +12,7 @@ public class RotationPlatform {
 	 */
 	public RotationPlatform(Port port) {
 		this.platformMotor = new EV3LargeRegulatedMotor(port);
-		this.platformMotor.setSpeed(360); // in Grad pro Sekunde
+		this.platformMotor.setSpeed(480); // in Grad pro Sekunde
 	}
 	
 	/*
@@ -34,8 +34,8 @@ public class RotationPlatform {
 	 * damit der Würfel vollständig gedreht wird
 	 */
 	public void rotateClockwiseForCubeRotation() {
-		this.platformMotor.rotate(108 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
-		this.platformMotor.rotate(-18 * 3); // 15° zurückdrehen
+		this.platformMotor.rotate(102 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
+		this.platformMotor.rotate(-12 * 3); // 15° zurückdrehen
 	}
 	
 	/*
@@ -43,8 +43,8 @@ public class RotationPlatform {
 	 * damit der Würfel vollständig gedreht wird
 	 */
 	public void rotateCounterclockwiseForCubeRotation() {
-		this.platformMotor.rotate(-108 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
-		this.platformMotor.rotate(18 * 3); // 15° zurückdrehen
+		this.platformMotor.rotate(-102 * 3); // um 15° weiter als 90° drehen, da Platform größer ist als Cube
+		this.platformMotor.rotate(12 * 3); // 15° zurückdrehen
 	}
 	
 	/*
@@ -59,5 +59,26 @@ public class RotationPlatform {
 	 */
 	public void defaultPosition() {
 		this.platformMotor.rotateTo(0);
+	}
+	
+	/*
+	 * Zum Kalibrieren der Plattform
+	 */
+	public void rotateOneDegreeClockwise() {
+		this.platformMotor.rotate(1 * 3);
+	}
+	
+	/*
+	 * Zum Kalibrieren der Plattform
+	 */
+	public void rotateOneDegreeCounterclockwise() {
+		this.platformMotor.rotate(-1 * 3);
+	}
+	
+	/*
+	 * Dreht die Plattform um den angegebenen Winkel
+	 */
+	public void rotate(int angle) {
+		this.platformMotor.rotate(angle * 3);
 	}
 }

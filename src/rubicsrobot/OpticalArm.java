@@ -13,40 +13,56 @@ public class OpticalArm {
 	private SampleProvider sampleProvider;
 	private int sampleSize;
 	private Robot robot;
+	private Grappler grappler;
+	private int[] positions;
 	
 	/*
 	 * Initialisiert den optischen Arm
 	 */
-	public OpticalArm(Port engingePort, Port sensorPort, Robot robot) {
-		this.opticalMotor = new EV3MediumRegulatedMotor(engingePort);
-		this.opticalMotor.setSpeed(360); // in Grad pro Sekunde
+	public OpticalArm(Port enginePort, Port sensorPort, Robot robot, Grappler grappler) {
+		this.opticalMotor = new EV3MediumRegulatedMotor(enginePort);
+		this.opticalMotor.setSpeed(480); // in Grad pro Sekunde
 		this.colorSensor = new EV3ColorSensor(sensorPort);
 		this.sampleProvider = this.colorSensor.getRGBMode();
 		this.sampleSize = this.sampleProvider.sampleSize();
 		this.robot = robot;
+		this.grappler = grappler;
+		this.positions = new int[] { -150, -150, -150 }; // Standardstartwerte zum Suchen des Würfels
 	}
 	
 	public float[] scanMiddleBlock() {
-		return scanBlock(2, 20, 3, 30);
+		this.opticalMotor.rotateTo(0);
+		this.grappler.holdCube();
+		this.grappler.releaseCube();
+		float[] result = scanBlock(2, 20, 3, 30, 0);
+		return result;
 	}
 	
 	public float[] scanCornerBlock() {
-		return scanBlock(2, 10, 3, 4);
+		return scanBlock(2, 10, 3, 4, 1);
 	}
 	
-	public float[] scanEdgeBlock() {
-		return scanBlock(2, 15, 5, 6);
+	public float[] scanEdgeBlock(boolean withAdjustment) {
+		if (withAdjustment) {
+			this.opticalMotor.rotateTo(0);
+			this.grappler.holdCube();
+			this.grappler.releaseCube();
+		}
+		float[] result = scanBlock(2, 15, 5, 6, 2);
+		return result;
 	}
 	
 	/*
 	 * Sucht den Anfang des Cubes anhand kleiner Sensorwerte
 	 */
-	private void searchStart() {
-		this.opticalMotor.rotateTo(-50 * 3);
+	private void searchStart(int savePosition) {
+		this.opticalMotor.rotateTo(this.positions[savePosition] + 3 * 15);
 		float[] rgb = new float[this.sampleSize];
 		boolean isSmall = true;
+		boolean posSaved = false;
 		
-		// 25 mal wird 3 Grad vorgerückt
+		// 25 mal wird 3 Grad vorgerückt und mindestens 3 Durchgänge,
+		// um Spiel des Getriebes auszugleichen
 		for (int i = 0; i < 25 && isSmall; i++) {
 			this.sampleProvider.fetchSample(rgb, 0); // Block wird gescannt
 			
@@ -57,12 +73,20 @@ public class OpticalArm {
 				// und die 2. Stelle nicht 1 ist
 				int convertedNumber = (int)(rgb[j] * 100);
 				if (convertedNumber != 0 && convertedNumber != 1) {
-					isSmall = false;
+					if (i > 2) {
+						isSmall = false;
+					} else {
+						this.positions[savePosition] = this.opticalMotor.getTachoCount();
+						posSaved = true;
+					}
 				}
 			}
 			if (isSmall) {
 				this.opticalMotor.rotate(-3 * 3);
 			}
+		}
+		if (!posSaved) {
+			this.positions[savePosition] = this.opticalMotor.getTachoCount();
 		}
 	}
 	
@@ -73,8 +97,9 @@ public class OpticalArm {
 	 * countOfMoves gibt an, wie oft maximal vorgerückt wird.
 	 * startRotationDegrees: Anzahl der Grad, wie viel bereits am Anfang nach vorne gegangen werden soll, 
 	 * nachdem die Startposition eingenommen wurde.
+	 * savePosition: Gibt den Index im Array positions an, in welcher die gefundene Scanposition gespeichert wird
 	 */
-	private float[] scanBlock(int degreesToMove, int countOfMoves, int countOfSuccess, int startRotationDegrees) {
+	private float[] scanBlock(int degreesToMove, int countOfMoves, int countOfSuccess, int startRotationDegrees, int savePosition) {
 		
 		// ColorManager-Instanze zur Überprüfung, ob 10 mal die gleiche Farbe gefunden wurde
 		ColorManager colorManager;
@@ -83,7 +108,7 @@ public class OpticalArm {
 		boolean success = false;
 		float[] rgb = new float[this.sampleSize];
 		do {
-			searchStart(); // Ausrichten der Kamera am Anfang des Würfels
+			searchStart(savePosition); // Ausrichten der Kamera am Anfang des Würfels
 			this.opticalMotor.rotate(-startRotationDegrees * 3); // Startposition zum Lesen einnehmen
 			
 			successCounter = 0;
@@ -116,9 +141,13 @@ public class OpticalArm {
 				// Hin und her drehen der Platform, damit Fläche anders liegt
 				this.robot.rotatePlatformClockwise();
 				this.robot.rotatePlatformCounterclockwise();
+				
+				// Um 20 Grad weiter unten mit dem Scannen beginnen
+				this.positions[savePosition] = this.positions[savePosition] + 20;
 			}
 		} while(!success);
 		
+		LCD.clear();
 		
 		// Durchschnittswert berechnen aus den gesammelten Farbenwerten
 		rgb = colorManager.calculateAverage(previousColor);

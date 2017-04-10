@@ -1,6 +1,8 @@
 package rubicsmain;
 
 import java.util.ArrayList;
+
+import lejos.hardware.lcd.LCD;
 import rubicscube.Corner;
 import rubicscube.Cube;
 import rubicscube.Edge;
@@ -34,22 +36,24 @@ public class Logic {
 			try {
 				c = this.scanCube();
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				this.robot.displayInformation("Würfel wurde nicht richtig eingelesen");
 				cubeSuccessfullyScanned = false;
 				continue;
 			}
+			this.robot.clearDisplay();
 			Solveable algorithm = new HumanSolvingAlgorithm(c);
 			try {
 				moves = algorithm.solveCube();
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				this.robot.displayInformation("Würfel wurde nicht richtig eingelesen");
 				
 				// Würfel wurde nicht richtig eingescannt und konnte deshalb nicht gelöst werden.
 				cubeSuccessfullyScanned = false;
 			}
 		} while(!cubeSuccessfullyScanned);
+		opitimizeMoveSequence(moves, false);
 		MoveSequence translatedSequence = RotationTranslationHandler.translateToRobotRotations(moves);
-		opitimizeMoveSequence(translatedSequence);
+		opitimizeMoveSequence(translatedSequence, true);
 		MoveHandler.doMoveSequence(this.robot, translatedSequence);
 	}
 	
@@ -172,24 +176,17 @@ public class Logic {
 	}
 	
 	/*
-	 * Optimiert bereits auf Roboter übersetzte MoveSequence.
+	 * Optimiert eine MoveSequence
 	 * Sinnlose Züge werden entfernt
+	 * isMechanicalTranslation: Gibt an, ob es sich um bereits in mechanische umgewandelte Züge 
+	 * handelt oder nicht. Sind die Züge bereits umgewandelt, dürfen nur noch Änderungen vorgenommen werden,
+	 * welche mit den zur Verfügung stehenden mechanischen Rotationen funktioniert.
 	 */
-	public void opitimizeMoveSequence(MoveSequence moveSequence) {
+	public void opitimizeMoveSequence(MoveSequence moveSequence, boolean isMechanicalTranslation) {
 		ArrayList<Move> moves = moveSequence.getMoves();
 		for (int i = moves.size() - 1; i >= 1; i--) {
 			Move currentMove = moves.get(i);
 			Move previousMove = moves.get(i - 1);
-			
-			// Gleiche Rotation, welche entgegengesetzt sind, sind überflüssig
-			// und werden gelöscht
-			if (currentMove.getRotation() == previousMove.getRotation() &&
-					currentMove.getDirection() != previousMove.getDirection()) {
-				moves.remove(i);
-				moves.remove(i - 1);
-				i--;
-				break;
-			}
 			
 			if (i >= 3) {
 				Move ppreviousMove = moves.get(i - 2);
@@ -208,8 +205,37 @@ public class Logic {
 					moves.remove(i - 2);
 					moves.remove(i - 3);
 					i = i - 3;
-					break;
+					continue;
 				}
+			}
+			
+			if (i >= 2 && !isMechanicalTranslation) {
+				Move ppreviousMove = moves.get(i - 2);
+				
+				// Drei gleiche Rotationen hintereinander können 
+				// durch eine entgegengesetzte Rotation ausgetauscht werden
+				if (currentMove.getRotation() == previousMove.getRotation() &&
+					currentMove.getDirection() == previousMove.getDirection() &&
+					ppreviousMove.getRotation() == previousMove.getRotation() &&
+					ppreviousMove.getDirection() == previousMove.getDirection()) {
+					Move newMove = new Move(currentMove.getRotation(), currentMove.getDirection().swap());
+					moves.add(i + 1, newMove);
+					moves.remove(i);
+					moves.remove(i - 1);
+					moves.remove(i - 2);
+					i = i - 2;
+					continue;
+				}
+			}
+			
+			// Gleiche Rotation, welche entgegengesetzt sind, sind überflüssig
+			// und werden gelöscht
+			if (currentMove.getRotation() == previousMove.getRotation() &&
+					currentMove.getDirection() != previousMove.getDirection()) {
+				moves.remove(i);
+				moves.remove(i - 1);
+				i--;
+				continue;
 			}
 		}
 	}
@@ -278,13 +304,14 @@ public class Logic {
 		OpticalArm opticalArm = this.robot.getOpticalArm();
 		scannedColors.add(opticalArm.scanMiddleBlock());
 		
-		// rundherum die Farben auslesen
+		// Rundherum werden hier die Farben ausgelesen.
 		for(int i = 0; i < 4; i++) {
-			scannedColors.add(opticalArm.scanEdgeBlock());
+			boolean withAdjustment = i == 0 ? false : true;
+			scannedColors.add(opticalArm.scanEdgeBlock(withAdjustment));
 			this.robot.rotateCubeToCornerPosition();
 			scannedColors.add(opticalArm.scanCornerBlock());
 
-			// um 45° weiter drehen, damit er wieder auf Kantenposition steht
+			// Um 45° weiter drehen, damit er wieder auf einer Kantenposition steht.
 			this.robot.rotateCubeToCornerPosition();
 		}
 		opticalArm.defaultPosition();
